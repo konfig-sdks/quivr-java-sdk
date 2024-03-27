@@ -1,0 +1,4759 @@
+openapi: 3.0.3
+info:
+  description: Open-source RAG Framework
+  title: FastAPI
+  version: 0.1.0
+  x-konfig-ignore:
+    object-with-no-properties: true
+  x-konfig-uses-multipart-form-data: true
+servers:
+- url: https://api.quivr.app
+tags:
+- name: Brain
+- name: Chat
+- name: Health
+- name: Prompt
+- name: User
+- name: API Key
+- name: Knowledge
+- name: Onboarding
+- name: BrainSubscription
+- name: Subscription
+- name: Crawl
+- name: Upload
+- name: Notification
+- name: Root
+- name: Contact
+paths:
+  /brains/public:
+    get:
+      description: Retrieve all Quivr public brains.
+      operationId: Brain_getAllPublic
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BrainGetAllPublicResponse'
+          description: Successful Response
+      security:
+      - AuthBearer: []
+      summary: Retrieve Public Brains
+      tags:
+      - Brain
+      x-konfig-operation-can-have-single-parameter: true
+      x-konfig-single-parameter-schema: konfig-generated-schema-single-parameter-schema-get--brains-public
+      x-accepts: application/json
+  /brains/{brain_id}/secrets-values:
+    put:
+      description: Update an existing brain's secrets.
+      operationId: Brain_updateSecretsValues
+      parameters:
+      - explode: false
+        in: path
+        name: brain_id
+        required: true
+        schema:
+          format: uuid
+          title: Brain Id
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BrainUpdateSecretsValuesRequest'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BrainUpdateSecretsValuesResponse'
+          description: Successful Response
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+          x-do-not-generate: true
+      security:
+      - AuthBearer: []
+      - AuthBearer: []
+      summary: Update Existing Brain Secrets
+      tags:
+      - Brain
+      x-konfig-operation-can-have-single-parameter: true
+      x-konfig-single-parameter-schema: konfig-generated-schema-single-parameter-schema-put--brains-brain_id-secrets-values
+      x-content-type: application/json
+      x-accepts: application/json
+  /brains/{brain_id}/default:
+    post:
+      description: Set a brain as the default for the current user.
+      operationId: Brain_setDefault
+      parameters:
+      - explode: false
+        in: path
+        name: brain_id
+        required: true
+        schema:
+          format: uuid
+          title: Brain Id
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BrainSetDefaultResponse'
+          description: Successful Response
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+          x-do-not-generate: true
+      security:
+      - AuthBearer: []
+      - AuthBearer: []
+      summary: Set Brain As Default
+      tags:
+      - Brain
+      x-konfig-operation-can-have-single-parameter: true
+      x-konfig-single-parameter-schema: konfig-generated-schema-single-parameter-schema-post--brains-brain_id-default
+      x-accepts: application/json
+  /brains/{brain_id}/documents:
+    post:
+      description: Retrieve the question context from a specific brain.
+      operationId: Brain_getQuestionContext
+      parameters:
+      - explode: false
+        in: path
+        name: brain_id
+        required: true
+        schema:
+          format: uuid
+          title: Brain Id
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BrainQuestionRequest'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BrainGetQuestionContextResponse'
+          description: Successful Response
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+          x-do-not-generate: true
+      security:
+      - AuthBearer: []
+      - AuthBearer: []
+      summary: Get Question Context For Brain
+      tags:
+      - Brain
+      x-konfig-operation-can-have-single-parameter: true
+      x-konfig-single-parameter-schema: konfig-generated-schema-single-parameter-schema-post--brains-brain_id-documents
+      x-content-type: application/json
+      x-accepts: application/json
+  /chat/healthz:
+    get:
+      operationId: Health_checkStatus
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthCheckStatusResponse'
+          description: Successful Response
+      summary: Healthz
+      tags:
+      - Health
+      x-konfig-operation-can-have-single-parameter: true
+      x-konfig-single-parameter-schema: konfig-generated-schema-single-parameter-schema-get--chat-healthz
+      x-accepts: application/json
+  /chat:
+    get:
+      description: |-
+        Retrieve all chats for the current user.
+
+        - `current_user`: The current authenticated user.
+        - Returns a list of all chats for the user.
+
+        This endpoint retrieves all the chats associated with the current authenticated user. It returns a list of chat objects
+        containing the chat ID and chat name for each chat.
+      operationId: Chat_getAllChats
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChatGetAllChatsResponse'
+          description: Successful Response
+      security:
+      - AuthBearer: []
+      - AuthBearer: []
+      summary: Get Chats
+      tags:
+      - Chat
+      x-konfig-operation-can-have-single-parameter: true
+      x-konfig-single-parameter-schema: konfig-generated-schema-single-parameter-schema-get--chat
+      x-accepts: application/json
+    post:
+      description: Create a new chat with initial chat messages.
+      operationId: Chat_createHandler
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateChatProperties'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChatCreateHandlerResponse'
+          description: Successful Response
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+          x-do-not-generate: true
+      security:
+      - AuthBearer: []
+      - AuthBearer: []
+      summary: Create Chat Handler
+      tags:
+      - Chat
+      x-konfig-operation-can-have-single-parameter: true
+      x-konfig-single-parameter-schema: konfig-generated-schema-single-parameter-schema-post--chat
+      x-content-type: application/json
+      x-accepts: application/json
+  /chat/{chat_id}:
+    delete:
+      description: Delete a specific chat by chat ID.
+      operationId: Chat_deleteChatById
+      parameters:
+      - explode: false
+        in: path
+        name: chat_id
+        required: true
+        schema:
+          format: uuid
+          title: Chat Id
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChatDeleteChatByIdResponse'
+          description: Successful Response
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+          x-do-not-generate: true
+      security:
+      - AuthBearer: []
+      summary: Delete Chat
+      tags:
+      - Chat
+      x-konfig-operation-can-have-single-parameter: true
+      x-konfig-single-parameter-schema: konfig-generated-schema-single-parameter-schema-delete--chat-chat_id
+      x-accepts: application/json
+  /chat/{chat_id}/metadata:
+    put:
+      description: Update chat attributes
+      operationId: Chat_updateMetadataHandler
+      parameters:
+      - explode: false
+        in: path
+        name: chat_id
+        required: true
+        schema:
+          format: uuid
+          title: Chat Id
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChatUpdatableProperties'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChatUpdateMetadataHandlerResponse'
+          description: Successful Response
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+          x-do-not-generate: true
+      security:
+      - AuthBearer: []
+      - AuthBearer: []
+      summary: Update Chat Metadata Handler
+      tags:
+      - Chat
+      x-konfig-operation-can-have-single-parameter: true
+      x-konfig-single-parameter-schema: konfig-generated-schema-single-parameter-schema-put--chat-chat_id-metadata
+      x-content-type: application/json
+      x-accepts: application/json
+  /chat/{chat_id}/{message_id}:
+    put:
+      operationId: Chat_updateMessage
+      parameters:
+      - explode: false
+        in: path
+        name: chat_id
+        required: true
+        schema:
+          format: uuid
+          title: Chat Id
+          type: string
+        style: simple
+      - explode: false
+        in: path
+        name: message_id
+        required: true
+        schema:
+          format: uuid
+          title: Message Id
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChatMessageProperties'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChatUpdateMessageResponse'
+          description: Successful Response
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+          x-do-not-generate: true
+      security:
+      - AuthBearer: []
+      - AuthBearer: []
+      summary: Update Chat Message
+      tags:
+      - Chat
+      x-konfig-operation-can-have-single-parameter: true
+      x-konfig-single-parameter-schema: konfig-generated-schema-single-parameter-schema-put--chat-chat_id-message_id
+      x-content-type: application/json
+      x-accepts: application/json
+  /chat/{chat_id}/question:
+    post:
+      operationId: Chat_handleQuestion
+      parameters:
+      - explode: false
+        in: path
+        name: chat_id
+        required: true
+        schema:
+          format: uuid
+          title: Chat Id
+          type: string
+        style: simple
+      - explode: true
+        in: query
+        name: brain_id
+        required: false
+        schema:
+          format: uuid
+          nullable: true
+          title: Brain Id
+          type: string
+        style: form
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChatQuestion'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChatHandleQuestionResponse'
+          description: Successful Response
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+          x-do-not-generate: true
+      security:
+      - AuthBearer: []
+      - AuthBearer: []
+      summary: Create Question Handler
+      tags:
+      - Chat
+      x-konfig-operation-can-have-single-parameter: false
+      x-content-type: application/json
+      x-accepts: application/json
+  /chat/{chat_id}/question/stream:
+    post:
+      operationId: Chat_createStreamQuestionHandler
+      parameters:
+      - explode: false
+        in: path
+        name: chat_id
+        required: true
+        schema:
+          format: uuid
+          title: Chat Id
+          type: string
+        style: simple
+      - explode: true
+        in: query
+        name: brain_id
+        required: false
+        schema:
+          format: uuid
+          nullable: true
+          title: Brain Id
+          type: string
+        style: form
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChatQuestion'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChatCreateStreamQuestionHandlerResponse'
+          description: Successful Response
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+          x-do-not-generate: true
+      security:
+      - AuthBearer: []
+      - AuthBearer: []
+      summary: Create Stream Question Handler
+      tags:
+      - Chat
+      x-konfig-operation-can-have-single-parameter: false
+      x-content-type: application/json
+      x-accepts: application/json
+  /chat/{chat_id}/history:
+    get:
+      operationId: Chat_getHistory
+      parameters:
+      - explode: false
+        in: path
+        name: chat_id
+        required: true
+        schema:
+          format: uuid
+          title: Chat Id
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChatGetHistoryResponse'
+          description: Successful Response
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+          x-do-not-generate: true
+      security:
+      - AuthBearer: []
+      summary: Get Chat History Handler
+      tags:
+      - Chat
+      x-konfig-operation-can-have-single-parameter: true
+      x-konfig-single-parameter-schema: konfig-generated-schema-single-parameter-schema-get--chat-chat_id-history
+      x-accepts: application/json
+  /chat/{chat_id}/question/answer:
+    post:
+      description: Add a new question and anwser to the chat.
+      operationId: Chat_addQuestionAndAnswer
+      parameters:
+      - explode: false
+        in: path
+        name: chat_id
+        required: true
+        schema:
+          format: uuid
+          title: Chat Id
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/QuestionAndAnswer'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChatNullable'
+          description: Successful Response
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+          x-do-not-generate: true
+      security:
+      - AuthBearer: []
+      summary: Add Question And Answer Handler
+      tags:
+      - Chat
+      x-konfig-operation-can-have-single-parameter: true
+      x-konfig-single-parameter-schema: konfig-generated-schema-single-parameter-schema-post--chat-chat_id-question-answer
+      x-content-type: application/json
+      x-accepts: application/json
+  /crawl/healthz:
+    get:
+      operationId: Health_checkStatus
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthCheckStatus200Response'
+          description: Successful Response
+      summary: Healthz
+      tags:
+      - Health
+      x-konfig-operation-can-have-single-parameter: true
+      x-konfig-single-parameter-schema: konfig-generated-schema-single-parameter-schema-get--crawl-healthz
+      x-accepts: application/json
+  /crawl:
+    post:
+      description: Crawl a website and process the crawled data.
+      operationId: Crawl_websiteDataProcessor
+      parameters:
+      - description: The ID of the brain
+        explode: true
+        in: query
+        name: brain_id
+        required: true
+        schema:
+          description: The ID of the brain
+          format: uuid
+          title: Brain Id
+          type: string
+        style: form
+      - description: The ID of the chat
+        explode: true
+        in: query
+        name: chat_id
+        required: false
+        schema:
+          description: The ID of the chat
+          format: uuid
+          nullable: true
+          title: Chat Id
+          type: string
+        style: form
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CrawlWebsite'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CrawlWebsiteDataProcessorResponse'
+          description: Successful Response
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+          x-do-not-generate: true
+      security:
+      - AuthBearer: []
+      - AuthBearer: []
+      summary: Crawl Endpoint
+      tags:
+      - Crawl
+      x-konfig-operation-can-have-single-parameter: true
+      x-konfig-single-parameter-schema: konfig-generated-schema-single-parameter-schema-post--crawl
+      x-content-type: application/json
+      x-accepts: application/json
+  /onboarding:
+    get:
+      description: Get user onboarding information for the current user
+      operationId: Onboarding_getUserInfo
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OnboardingStatesNullable'
+          description: Successful Response
+      security:
+      - AuthBearer: []
+      - AuthBearer: []
+      summary: Get User Onboarding Handler
+      tags:
+      - Onboarding
+      x-konfig-operation-can-have-single-parameter: true
+      x-konfig-single-parameter-schema: konfig-generated-schema-single-parameter-schema-get--onboarding
+      x-accepts: application/json
+    put:
+      description: Update user onboarding information for the current user
+      operationId: Onboarding_updateUserOnboarding
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OnboardingUpdatableProperties'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OnboardingStates'
+          description: Successful Response
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+          x-do-not-generate: true
+      security:
+      - AuthBearer: []
+      - AuthBearer: []
+      summary: Update User Onboarding Handler
+      tags:
+      - Onboarding
+      x-konfig-operation-can-have-single-parameter: true
+      x-konfig-single-parameter-schema: konfig-generated-schema-single-parameter-schema-put--onboarding
+      x-content-type: application/json
+      x-accepts: application/json
+  /:
+    get:
+      description: Root endpoint to check the status of the API.
+      operationId: Root_statusCheck
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RootStatusCheckResponse'
+          description: Successful Response
+      summary: Root
+      tags:
+      - Root
+      x-konfig-operation-can-have-single-parameter: true
+      x-konfig-single-parameter-schema: konfig-generated-schema-single-parameter-schema-get--
+      x-accepts: application/json
+  /healthz:
+    get:
+      operationId: Health_checkStatus
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthCheckStatus200Response'
+          description: Successful Response
+      summary: Healthz
+      tags:
+      - Health
+      x-konfig-operation-can-have-single-parameter: true
+      x-konfig-single-parameter-schema: konfig-generated-schema-single-parameter-schema-get--healthz
+      x-accepts: application/json
+  /upload/healthz:
+    get:
+      operationId: Health_checkStatus
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthCheckStatus200Response'
+          description: Successful Response
+      summary: Healthz
+      tags:
+      - Health
+      x-konfig-operation-can-have-single-parameter: true
+      x-konfig-single-parameter-schema: konfig-generated-schema-single-parameter-schema-get--upload-healthz
+      x-accepts: application/json
+  /upload:
+    post:
+      operationId: Upload_filePost
+      parameters:
+      - description: The ID of the brain
+        explode: true
+        in: query
+        name: brain_id
+        required: true
+        schema:
+          description: The ID of the brain
+          format: uuid
+          title: Brain Id
+          type: string
+        style: form
+      - description: The ID of the chat
+        explode: true
+        in: query
+        name: chat_id
+        required: false
+        schema:
+          description: The ID of the chat
+          format: uuid
+          nullable: true
+          title: Chat Id
+          type: string
+        style: form
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Body_upload_file_upload_post'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UploadFilePostResponse'
+          description: Successful Response
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+          x-do-not-generate: true
+      security:
+      - AuthBearer: []
+      - AuthBearer: []
+      summary: Upload File
+      tags:
+      - Upload
+      x-konfig-operation-can-have-single-parameter: true
+      x-konfig-single-parameter-schema: konfig-generated-schema-single-parameter-schema-post--upload
+      x-content-type: multipart/form-data
+      x-accepts: application/json
+  /user:
+    get:
+      description: |-
+        Get user information and statistics.
+
+        - `current_user`: The current authenticated user.
+        - Returns the user's email, maximum brain size, current brain size, maximum requests number, requests statistics, and the current date.
+
+        This endpoint retrieves information and statistics about the authenticated user. It includes the user's email, maximum brain size,
+        current brain size, maximum requests number, requests statistics, and the current date. The brain size is calculated based on the
+        user's uploaded vectors, and the maximum brain size is obtained from the environment variables. The requests statistics provide
+        information about the user's API usage.
+      operationId: User_getUserInformation
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserGetUserInformationResponse'
+          description: Successful Response
+      security:
+      - AuthBearer: []
+      - AuthBearer: []
+      summary: Get User Endpoint
+      tags:
+      - User
+      x-konfig-operation-can-have-single-parameter: true
+      x-konfig-single-parameter-schema: konfig-generated-schema-single-parameter-schema-get--user
+      x-accepts: application/json
+  /user/identity:
+    get:
+      description: Get user identity.
+      operationId: User_getIdentityRoute
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserIdentity'
+          description: Successful Response
+      security:
+      - AuthBearer: []
+      - AuthBearer: []
+      summary: Get User Identity Route
+      tags:
+      - User
+      x-konfig-operation-can-have-single-parameter: true
+      x-konfig-single-parameter-schema: konfig-generated-schema-single-parameter-schema-get--user-identity
+      x-accepts: application/json
+    put:
+      description: Update user identity.
+      operationId: User_updateIdentityRoute
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserUpdatableProperties'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserIdentity'
+          description: Successful Response
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+          x-do-not-generate: true
+      security:
+      - AuthBearer: []
+      - AuthBearer: []
+      summary: Update User Identity Route
+      tags:
+      - User
+      x-konfig-operation-can-have-single-parameter: true
+      x-konfig-single-parameter-schema: konfig-generated-schema-single-parameter-schema-put--user-identity
+      x-content-type: application/json
+      x-accepts: application/json
+  /api-key:
+    post:
+      description: |-
+        Create new API key for the current user.
+
+        - `current_user`: The current authenticated user.
+        - Returns the newly created API key.
+
+        This endpoint generates a new API key for the current user. The API key is stored in the database and associated with
+        the user. It returns the newly created API key.
+      operationId: ApiKey_createNewKey
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiKey'
+          description: Successful Response
+      security:
+      - AuthBearer: []
+      - AuthBearer: []
+      summary: Create Api Key
+      tags:
+      - API Key
+      x-konfig-operation-can-have-single-parameter: true
+      x-konfig-single-parameter-schema: konfig-generated-schema-single-parameter-schema-post--api-key
+      x-accepts: application/json
+  /api-key/{key_id}:
+    delete:
+      description: |-
+        Delete (deactivate) an API key for the current user.
+
+        - `key_id`: The ID of the API key to delete.
+
+        This endpoint deactivates and deletes the specified API key associated with the current user. The API key is marked
+        as inactive in the database.
+      operationId: ApiKey_deleteKey
+      parameters:
+      - explode: false
+        in: path
+        name: key_id
+        required: true
+        schema:
+          title: Key Id
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiKeyDeleteKeyResponse'
+          description: Successful Response
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+          x-do-not-generate: true
+      security:
+      - AuthBearer: []
+      - AuthBearer: []
+      summary: Delete Api Key
+      tags:
+      - API Key
+      x-konfig-operation-can-have-single-parameter: true
+      x-konfig-single-parameter-schema: konfig-generated-schema-single-parameter-schema-delete--api-key-key_id
+      x-accepts: application/json
+  /api-keys:
+    get:
+      description: |-
+        Get all active API keys for the current user.
+
+        - `current_user`: The current authenticated user.
+        - Returns a list of active API keys with their IDs and creation times.
+
+        This endpoint retrieves all the active API keys associated with the current user. It returns a list of API key objects
+        containing the key ID and creation time for each API key.
+      operationId: ApiKey_getList
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiKeyGetListResponse'
+          description: Successful Response
+      security:
+      - AuthBearer: []
+      - AuthBearer: []
+      summary: Get Api Keys
+      tags:
+      - API Key
+      x-konfig-operation-can-have-single-parameter: true
+      x-konfig-single-parameter-schema: konfig-generated-schema-single-parameter-schema-get--api-keys
+      x-accepts: application/json
+  /brains/{brain_id}/subscription:
+    delete:
+      description: Remove a user's subscription to a brain
+      operationId: Brain_removeUserSubscription
+      parameters:
+      - explode: false
+        in: path
+        name: brain_id
+        required: true
+        schema:
+          format: uuid
+          title: Brain Id
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BrainRemoveUserSubscriptionResponse'
+          description: Successful Response
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+          x-do-not-generate: true
+      security:
+      - AuthBearer: []
+      summary: Remove User Subscription
+      tags:
+      - Brain
+      x-konfig-operation-can-have-single-parameter: true
+      x-konfig-single-parameter-schema: konfig-generated-schema-single-parameter-schema-delete--brains-brain_id-subscription
+      x-accepts: application/json
+    get:
+      description: |-
+        Get an invitation to a brain for a user. This function checks if the user
+        has been invited to the brain and returns the invitation status.
+      operationId: BrainSubscription_getUserInvitation
+      parameters:
+      - explode: false
+        in: path
+        name: brain_id
+        required: true
+        schema:
+          format: uuid
+          title: Brain Id
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BrainSubscriptionGetUserInvitationResponse'
+          description: Successful Response
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+          x-do-not-generate: true
+      security:
+      - AuthBearer: []
+      - AuthBearer: []
+      summary: Get User Invitation
+      tags:
+      - BrainSubscription
+      x-konfig-operation-can-have-single-parameter: true
+      x-konfig-single-parameter-schema: konfig-generated-schema-single-parameter-schema-get--brains-brain_id-subscription
+      x-accepts: application/json
+    post:
+      description: |-
+        Invite multiple users to a brain by their emails. This function creates
+        or updates a brain subscription invitation for each user and sends an
+        invitation email to each user.
+      operationId: BrainSubscription_inviteUsersToBrain
+      parameters:
+      - explode: false
+        in: path
+        name: brain_id
+        required: true
+        schema:
+          format: uuid
+          title: Brain Id
+          type: string
+        style: simple
+      - explode: false
+        in: header
+        name: origin
+        required: false
+        schema:
+          nullable: true
+          title: Origin
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BrainSubscriptionInviteUsersToBrainRequest'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BrainSubscriptionInviteUsersToBrainResponse'
+          description: Successful Response
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+          x-do-not-generate: true
+      security:
+      - AuthBearer: []
+      - AuthBearer: []
+      summary: Invite Users To Brain
+      tags:
+      - BrainSubscription
+      x-konfig-operation-can-have-single-parameter: false
+      x-content-type: application/json
+      x-accepts: application/json
+    put:
+      operationId: Brain_updateSubscription
+      parameters:
+      - explode: false
+        in: path
+        name: brain_id
+        required: true
+        schema:
+          format: uuid
+          title: Brain Id
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BrainSubscriptionUpdatableProperties'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BrainUpdateSubscriptionResponse'
+          description: Successful Response
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+          x-do-not-generate: true
+      security:
+      - AuthBearer: []
+      - AuthBearer: []
+      summary: Update Brain Subscription
+      tags:
+      - Brain
+      x-konfig-operation-can-have-single-parameter: true
+      x-konfig-single-parameter-schema: konfig-generated-schema-single-parameter-schema-put--brains-brain_id-subscription
+      x-content-type: application/json
+      x-accepts: application/json
+  /brains/{brain_id}/users:
+    get:
+      description: Get all users for a brain
+      operationId: Brain_getUsers
+      parameters:
+      - explode: false
+        in: path
+        name: brain_id
+        required: true
+        schema:
+          format: uuid
+          title: Brain Id
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BrainGetUsersResponse'
+          description: Successful Response
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+          x-do-not-generate: true
+      security:
+      - AuthBearer: []
+      - AuthBearer: []
+      summary: Get Users With Brain Access
+      tags:
+      - Brain
+      x-konfig-operation-can-have-single-parameter: true
+      x-konfig-single-parameter-schema: konfig-generated-schema-single-parameter-schema-get--brains-brain_id-users
+      x-accepts: application/json
+  /brains/{brain_id}/subscription/accept:
+    post:
+      description: |-
+        Accept an invitation to a brain for a user. This function removes the
+        invitation from the subscription invitations and adds the user to the
+        brain users.
+      operationId: Brain_acceptInvitation
+      parameters:
+      - explode: false
+        in: path
+        name: brain_id
+        required: true
+        schema:
+          format: uuid
+          title: Brain Id
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BrainAcceptInvitationResponse'
+          description: Successful Response
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+          x-do-not-generate: true
+      security:
+      - AuthBearer: []
+      summary: Accept Invitation
+      tags:
+      - Brain
+      x-konfig-operation-can-have-single-parameter: true
+      x-konfig-single-parameter-schema: konfig-generated-schema-single-parameter-schema-post--brains-brain_id-subscription-accept
+      x-accepts: application/json
+  /brains/{brain_id}/subscription/decline:
+    post:
+      description: |-
+        Decline an invitation to a brain for a user. This function removes the
+        invitation from the subscription invitations.
+      operationId: Brain_declineInvitation
+      parameters:
+      - explode: false
+        in: path
+        name: brain_id
+        required: true
+        schema:
+          format: uuid
+          title: Brain Id
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BrainDeclineInvitationResponse'
+          description: Successful Response
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+          x-do-not-generate: true
+      security:
+      - AuthBearer: []
+      summary: Decline Invitation
+      tags:
+      - Brain
+      x-konfig-operation-can-have-single-parameter: true
+      x-konfig-single-parameter-schema: konfig-generated-schema-single-parameter-schema-post--brains-brain_id-subscription-decline
+      x-accepts: application/json
+  /brains/{brain_id}/subscribe:
+    post:
+      description: Subscribe to a public brain
+      operationId: Subscription_brainHandler
+      parameters:
+      - explode: false
+        in: path
+        name: brain_id
+        required: true
+        schema:
+          format: uuid
+          title: Brain Id
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubscriptionBrainHandlerRequest'
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubscriptionBrainHandlerResponse'
+          description: Successful Response
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+          x-do-not-generate: true
+      security:
+      - AuthBearer: []
+      summary: Subscribe To Brain Handler
+      tags:
+      - Subscription
+      x-konfig-operation-can-have-single-parameter: true
+      x-konfig-single-parameter-schema: konfig-generated-schema-single-parameter-schema-post--brains-brain_id-subscribe
+      x-content-type: application/json
+      x-accepts: application/json
+  /brains/{brain_id}/unsubscribe:
+    post:
+      description: Unsubscribe from a brain
+      operationId: Subscription_unregisterHandler
+      parameters:
+      - explode: false
+        in: path
+        name: brain_id
+        required: true
+        schema:
+          format: uuid
+          title: Brain Id
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubscriptionUnregisterHandlerResponse'
+          description: Successful Response
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+          x-do-not-generate: true
+      security:
+      - AuthBearer: []
+      summary: Unsubscribe From Brain Handler
+      tags:
+      - Subscription
+      x-konfig-operation-can-have-single-parameter: true
+      x-konfig-single-parameter-schema: konfig-generated-schema-single-parameter-schema-post--brains-brain_id-unsubscribe
+      x-accepts: application/json
+  /prompts:
+    get:
+      description: Retrieve all public prompt
+      operationId: Prompt_getAllPublicPrompts
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PromptGetAllPublicPromptsResponse'
+          description: Successful Response
+      security:
+      - AuthBearer: []
+      summary: Get Prompts
+      tags:
+      - Prompt
+      x-konfig-operation-can-have-single-parameter: true
+      x-konfig-single-parameter-schema: konfig-generated-schema-single-parameter-schema-get--prompts
+      x-accepts: application/json
+    post:
+      description: Create a prompt by its id
+      operationId: Prompt_createPromptById
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreatePromptProperties'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PromptNullable'
+          description: Successful Response
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+          x-do-not-generate: true
+      security:
+      - AuthBearer: []
+      summary: Create Prompt Route
+      tags:
+      - Prompt
+      x-konfig-operation-can-have-single-parameter: true
+      x-konfig-single-parameter-schema: konfig-generated-schema-single-parameter-schema-post--prompts
+      x-content-type: application/json
+      x-accepts: application/json
+  /prompts/{prompt_id}:
+    get:
+      description: Retrieve a prompt by its id
+      operationId: Prompt_getById
+      parameters:
+      - explode: false
+        in: path
+        name: prompt_id
+        required: true
+        schema:
+          format: uuid
+          title: Prompt Id
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PromptNullable'
+          description: Successful Response
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+          x-do-not-generate: true
+      security:
+      - AuthBearer: []
+      summary: Get Prompt
+      tags:
+      - Prompt
+      x-konfig-operation-can-have-single-parameter: true
+      x-konfig-single-parameter-schema: konfig-generated-schema-single-parameter-schema-get--prompts-prompt_id
+      x-accepts: application/json
+    put:
+      description: Update a prompt by its id
+      operationId: Prompt_updateById
+      parameters:
+      - explode: false
+        in: path
+        name: prompt_id
+        required: true
+        schema:
+          format: uuid
+          title: Prompt Id
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PromptUpdatableProperties'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PromptNullable'
+          description: Successful Response
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+          x-do-not-generate: true
+      security:
+      - AuthBearer: []
+      summary: Update Prompt
+      tags:
+      - Prompt
+      x-konfig-operation-can-have-single-parameter: true
+      x-konfig-single-parameter-schema: konfig-generated-schema-single-parameter-schema-put--prompts-prompt_id
+      x-content-type: application/json
+      x-accepts: application/json
+  /notifications/{chat_id}:
+    get:
+      description: Get notifications by chat_id
+      operationId: Notification_getByChatId
+      parameters:
+      - explode: false
+        in: path
+        name: chat_id
+        required: true
+        schema:
+          format: uuid
+          title: Chat Id
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotificationGetByChatIdResponse'
+          description: Successful Response
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+          x-do-not-generate: true
+      security:
+      - AuthBearer: []
+      summary: Get Notifications
+      tags:
+      - Notification
+      x-konfig-operation-can-have-single-parameter: true
+      x-konfig-single-parameter-schema: konfig-generated-schema-single-parameter-schema-get--notifications-chat_id
+      x-accepts: application/json
+  /knowledge:
+    get:
+      description: Retrieve and list all the knowledge in a brain.
+      operationId: Knowledge_getAllKnowledge
+      parameters:
+      - description: The ID of the brain
+        explode: true
+        in: query
+        name: brain_id
+        required: true
+        schema:
+          description: The ID of the brain
+          format: uuid
+          title: Brain Id
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/KnowledgeGetAllKnowledgeResponse'
+          description: Successful Response
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+          x-do-not-generate: true
+      security:
+      - AuthBearer: []
+      - AuthBearer: []
+      summary: List Knowledge In Brain Endpoint
+      tags:
+      - Knowledge
+      x-konfig-operation-can-have-single-parameter: true
+      x-konfig-single-parameter-schema: konfig-generated-schema-single-parameter-schema-get--knowledge
+      x-accepts: application/json
+  /knowledge/{knowledge_id}:
+    delete:
+      description: Delete a specific knowledge from a brain.
+      operationId: Knowledge_deleteSpecificBrainKnowledge
+      parameters:
+      - explode: false
+        in: path
+        name: knowledge_id
+        required: true
+        schema:
+          format: uuid
+          title: Knowledge Id
+          type: string
+        style: simple
+      - explode: true
+        in: query
+        name: brain_id
+        required: true
+        schema:
+          format: uuid
+          title: Brain Id
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/KnowledgeDeleteSpecificBrainKnowledgeResponse'
+          description: Successful Response
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+          x-do-not-generate: true
+      security:
+      - AuthBearer: []
+      - AuthBearer: []
+      summary: Delete Endpoint
+      tags:
+      - Knowledge
+      x-konfig-operation-can-have-single-parameter: true
+      x-konfig-single-parameter-schema: konfig-generated-schema-single-parameter-schema-delete--knowledge-knowledge_id
+      x-accepts: application/json
+  /knowledge/{knowledge_id}/signed_download_url:
+    get:
+      description: Generate a signed url to download the file from storage.
+      operationId: Knowledge_generateSignedUrl
+      parameters:
+      - explode: false
+        in: path
+        name: knowledge_id
+        required: true
+        schema:
+          format: uuid
+          title: Knowledge Id
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/KnowledgeGenerateSignedUrlResponse'
+          description: Successful Response
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+          x-do-not-generate: true
+      security:
+      - AuthBearer: []
+      - AuthBearer: []
+      summary: Generate Signed Url Endpoint
+      tags:
+      - Knowledge
+      x-konfig-operation-can-have-single-parameter: true
+      x-konfig-single-parameter-schema: konfig-generated-schema-single-parameter-schema-get--knowledge-knowledge_id-signed_download_url
+      x-accepts: application/json
+  /contact:
+    post:
+      operationId: Contact_createNewContact
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ContactMessage'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContactCreateNewContactResponse'
+          description: Successful Response
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+          x-do-not-generate: true
+      summary: Post Contact
+      tags:
+      - Contact
+      x-konfig-operation-can-have-single-parameter: true
+      x-konfig-single-parameter-schema: konfig-generated-schema-single-parameter-schema-post--contact
+      x-content-type: application/json
+      x-accepts: application/json
+  /brains/integrations:
+    get:
+      description: Retrieve the integration brain description.
+      operationId: Brain_getDescription
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BrainGetDescriptionResponse'
+          description: Successful Response
+      security:
+      - AuthBearer: []
+      summary: Get Integration Brain Description
+      tags:
+      - Brain
+      x-konfig-operation-can-have-single-parameter: true
+      x-konfig-single-parameter-schema: konfig-generated-schema-single-parameter-schema-get--brains-integrations
+      x-accepts: application/json
+  /brains:
+    get:
+      description: Retrieve all brains for the current user.
+      operationId: Brain_getAllForUser
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BrainGetAllForUserResponse'
+          description: Successful Response
+      security:
+      - AuthBearer: []
+      - AuthBearer: []
+      summary: Retrieve All Brains For User
+      tags:
+      - Brain
+      x-konfig-operation-can-have-single-parameter: true
+      x-konfig-single-parameter-schema: konfig-generated-schema-single-parameter-schema-get--brains
+      x-accepts: application/json
+    post:
+      description: Create a new brain for the user.
+      operationId: Brain_createNewBrain
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateBrainProperties'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BrainCreateNewBrainResponse'
+          description: Successful Response
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+          x-do-not-generate: true
+      security:
+      - AuthBearer: []
+      - AuthBearer: []
+      summary: Create New Brain
+      tags:
+      - Brain
+      x-konfig-operation-can-have-single-parameter: true
+      x-konfig-single-parameter-schema: konfig-generated-schema-single-parameter-schema-post--brains
+      x-content-type: application/json
+      x-accepts: application/json
+  /brains/default:
+    get:
+      description: Retrieve or create the default brain for the current user.
+      operationId: Brain_getDefaultBrain
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BrainGetDefaultBrainResponse'
+          description: Successful Response
+      security:
+      - AuthBearer: []
+      - AuthBearer: []
+      summary: Retrieve Default Brain
+      tags:
+      - Brain
+      x-konfig-operation-can-have-single-parameter: true
+      x-konfig-single-parameter-schema: konfig-generated-schema-single-parameter-schema-get--brains-default
+      x-accepts: application/json
+  /brains/{brain_id}:
+    get:
+      description: Retrieve details of a specific brain by its ID.
+      operationId: Brain_getById
+      parameters:
+      - explode: false
+        in: path
+        name: brain_id
+        required: true
+        schema:
+          format: uuid
+          title: Brain Id
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BrainGetByIdResponse'
+          description: Successful Response
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+          x-do-not-generate: true
+      security:
+      - AuthBearer: []
+      - AuthBearer: []
+      summary: Retrieve Brain By Id
+      tags:
+      - Brain
+      x-konfig-operation-can-have-single-parameter: true
+      x-konfig-single-parameter-schema: konfig-generated-schema-single-parameter-schema-get--brains-brain_id
+      x-accepts: application/json
+    put:
+      description: Update an existing brain's configuration.
+      operationId: Brain_updateConfiguration
+      parameters:
+      - explode: false
+        in: path
+        name: brain_id
+        required: true
+        schema:
+          format: uuid
+          title: Brain Id
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BrainUpdatableProperties'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BrainUpdateConfigurationResponse'
+          description: Successful Response
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+          x-do-not-generate: true
+      security:
+      - AuthBearer: []
+      - AuthBearer: []
+      summary: Update Existing Brain
+      tags:
+      - Brain
+      x-konfig-operation-can-have-single-parameter: true
+      x-konfig-single-parameter-schema: konfig-generated-schema-single-parameter-schema-put--brains-brain_id
+      x-content-type: application/json
+      x-accepts: application/json
+components:
+  schemas:
+    ApiBrainAllowedMethods:
+      enum:
+      - GET
+      - POST
+      - PUT
+      - DELETE
+      title: ApiBrainAllowedMethods
+      type: string
+    ApiBrainDefinitionEntity-Input:
+      properties:
+        brain_id:
+          format: uuid
+          title: Brain Id
+          type: string
+        method:
+          $ref: '#/components/schemas/ApiBrainAllowedMethods'
+        url:
+          title: Url
+          type: string
+        params:
+          $ref: '#/components/schemas/ApiBrainDefinitionSchema'
+        search_params:
+          $ref: '#/components/schemas/ApiBrainDefinitionSchema'
+        secrets:
+          items:
+            $ref: '#/components/schemas/ApiBrainDefinitionSecret'
+          title: Secrets
+          type: array
+        raw:
+          default: false
+          example: false
+          title: Raw
+          type: boolean
+          x-konfig-original-example: false
+          x-konfig-generated-schema: konfig-generated-schema-components-schemas-ApiBrainDefinitionEntity-Input-properties-raw
+        jq_instructions:
+          nullable: true
+          title: Jq Instructions
+          type: string
+      required:
+      - brain_id
+      - method
+      - params
+      - search_params
+      - secrets
+      - url
+      title: ApiBrainDefinitionEntity
+      type: object
+    ApiBrainDefinitionEntity-Output:
+      properties:
+        brain_id:
+          format: uuid
+          title: Brain Id
+          type: string
+        method:
+          $ref: '#/components/schemas/ApiBrainAllowedMethods'
+        url:
+          title: Url
+          type: string
+        params:
+          $ref: '#/components/schemas/ApiBrainDefinitionSchema'
+        search_params:
+          $ref: '#/components/schemas/ApiBrainDefinitionSchema'
+        secrets:
+          items:
+            $ref: '#/components/schemas/ApiBrainDefinitionSecret'
+          title: Secrets
+          type: array
+        raw:
+          default: false
+          example: false
+          title: Raw
+          type: boolean
+          x-konfig-original-example: false
+          x-konfig-generated-schema: konfig-generated-schema-components-schemas-ApiBrainDefinitionEntity-Output-properties-raw
+        jq_instructions:
+          nullable: true
+          title: Jq Instructions
+          type: string
+      required:
+      - brain_id
+      - method
+      - params
+      - search_params
+      - secrets
+      - url
+      title: ApiBrainDefinitionEntity
+      type: object
+    ApiBrainDefinitionSchema:
+      example:
+        properties: []
+        required: []
+      properties:
+        properties:
+          default: []
+          example: []
+          items:
+            $ref: '#/components/schemas/ApiBrainDefinitionSchemaProperty'
+          title: Properties
+          type: array
+          x-konfig-original-example: []
+          x-konfig-generated-schema: konfig-generated-schema-components-schemas-ApiBrainDefinitionSchema-properties-properties
+        required:
+          default: []
+          example: []
+          items:
+            type: string
+          title: Required
+          type: array
+          x-konfig-original-example: []
+          x-konfig-generated-schema: konfig-generated-schema-components-schemas-ApiBrainDefinitionSchema-properties-required
+      title: ApiBrainDefinitionSchema
+      type: object
+    ApiBrainDefinitionSchemaProperty:
+      properties:
+        description:
+          title: Description
+          type: string
+        type:
+          title: Type
+          type: string
+        enum:
+          items: {}
+          nullable: true
+          title: Enum
+          type: array
+        name:
+          title: Name
+          type: string
+      required:
+      - description
+      - name
+      - type
+      title: ApiBrainDefinitionSchemaProperty
+      type: object
+    ApiBrainDefinitionSecret:
+      example:
+        name: name
+        description: description
+        type: type
+      properties:
+        description:
+          nullable: true
+          title: Description
+          type: string
+        name:
+          title: Name
+          type: string
+        type:
+          title: Type
+          type: string
+      required:
+      - name
+      - type
+      title: ApiBrainDefinitionSecret
+      type: object
+    ApiKey:
+      example:
+        creation_time: creation_time
+        is_active: true
+        api_key: api_key
+        key_id: key_id
+        name: name
+        days: 0
+        only_chat: true
+      properties:
+        api_key:
+          title: Api Key
+          type: string
+        key_id:
+          title: Key Id
+          type: string
+        days:
+          title: Days
+          type: integer
+        only_chat:
+          title: Only Chat
+          type: boolean
+        name:
+          title: Name
+          type: string
+        creation_time:
+          title: Creation Time
+          type: string
+        is_active:
+          title: Is Active
+          type: boolean
+      required:
+      - api_key
+      - creation_time
+      - days
+      - is_active
+      - key_id
+      - name
+      - only_chat
+      title: ApiKey
+      type: object
+      x-konfig-is-used-in-successful-response: true
+    ApiKeyInfo:
+      example:
+        creation_time: creation_time
+        key_id: key_id
+      properties:
+        key_id:
+          title: Key Id
+          type: string
+        creation_time:
+          title: Creation Time
+          type: string
+      required:
+      - creation_time
+      - key_id
+      title: ApiKeyInfo
+      type: object
+    Body_upload_file_upload_post:
+      properties:
+        uploadFile:
+          format: binary
+          title: Uploadfile
+          type: string
+      required:
+      - uploadFile
+      title: Body_upload_file_upload_post
+      type: object
+    BrainIntegrationSettings:
+      properties:
+        integration_id:
+          title: Integration Id
+          type: string
+        settings:
+          title: Settings
+          type: object
+      required:
+      - integration_id
+      - settings
+      title: BrainIntegrationSettings
+      type: object
+    BrainIntegrationUpdateSettings:
+      properties:
+        settings:
+          title: Settings
+          type: object
+      required:
+      - settings
+      title: BrainIntegrationUpdateSettings
+      type: object
+    BrainQuestionRequest:
+      example:
+        question: question
+      properties:
+        question:
+          title: Question
+          type: string
+      required:
+      - question
+      title: BrainQuestionRequest
+      type: object
+    BrainSubscriptionUpdatableProperties:
+      example:
+        rights: rights
+        email: email
+      properties:
+        rights:
+          nullable: true
+          title: Rights
+          type: string
+        email:
+          title: Email
+          type: string
+      required:
+      - email
+      title: BrainSubscriptionUpdatableProperties
+      type: object
+    BrainType:
+      enum:
+      - doc
+      - api
+      - composite
+      - integration
+      title: BrainType
+      type: string
+    BrainUpdatableProperties:
+      example:
+        brain_definition:
+          method: null
+          search_params:
+            properties: []
+            required: []
+          raw: false
+          jq_instructions: jq_instructions
+          params:
+            properties: []
+            required: []
+          secrets:
+          - name: name
+            description: description
+            type: type
+          - name: name
+            description: description
+            type: type
+          brain_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          url: url
+        max_tokens: 6
+        connected_brains_ids: []
+        name: name
+        temperature: 0.8008281904610115
+        integration:
+          settings: "{}"
+        description: description
+        model: model
+        prompt_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        status: status
+      properties:
+        description:
+          nullable: true
+          title: Description
+          type: string
+        name:
+          nullable: true
+          title: Name
+          type: string
+        temperature:
+          nullable: true
+          title: Temperature
+          type: number
+        model:
+          nullable: true
+          title: Model
+          type: string
+        max_tokens:
+          nullable: true
+          title: Max Tokens
+          type: integer
+        status:
+          nullable: true
+          title: Status
+          type: string
+        prompt_id:
+          format: uuid
+          nullable: true
+          title: Prompt Id
+          type: string
+        brain_definition:
+          $ref: '#/components/schemas/ApiBrainDefinitionEntity-InputNullable'
+        connected_brains_ids:
+          default: []
+          example: []
+          items:
+            format: uuid
+            type: string
+          nullable: true
+          title: Connected Brains Ids
+          type: array
+          x-konfig-original-example: []
+          x-konfig-generated-schema: konfig-generated-schema-components-schemas-BrainUpdatableProperties-properties-connected_brains_ids
+        integration:
+          $ref: '#/components/schemas/BrainIntegrationUpdateSettingsNullable'
+      title: BrainUpdatableProperties
+      type: object
+    Chat:
+      properties:
+        chat_id:
+          title: Chat Id
+          type: string
+        user_id:
+          title: User Id
+          type: string
+        creation_time:
+          title: Creation Time
+          type: string
+        chat_name:
+          title: Chat Name
+          type: string
+      required:
+      - chat_id
+      - chat_name
+      - creation_time
+      - user_id
+      title: Chat
+      type: object
+    ChatItem:
+      example:
+        item_type: null
+        body:
+          metadata: "{}"
+          assistant: assistant
+          user_message: user_message
+          message_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          message: message
+          brain_name: brain_name
+          chat_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          prompt_title: prompt_title
+          message_time: message_time
+          datetime: datetime
+          action: action
+          id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          brain_id: brain_id
+          thumbs: true
+          status: null
+      properties:
+        item_type:
+          $ref: '#/components/schemas/ChatItemType'
+        body:
+          $ref: '#/components/schemas/GCHON'
+      required:
+      - body
+      - item_type
+      title: ChatItem
+      type: object
+    ChatItemType:
+      enum:
+      - MESSAGE
+      - NOTIFICATION
+      title: ChatItemType
+      type: string
+    ChatMessageProperties:
+      example:
+        thumbs: true
+      properties:
+        thumbs:
+          nullable: true
+          title: Thumbs
+          type: boolean
+      required:
+      - thumbs
+      title: ChatMessageProperties
+      type: object
+    ChatQuestion:
+      example:
+        question: question
+        max_tokens: 6
+        temperature: 0.8008281904610115
+        model: model
+        prompt_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        brain_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+      properties:
+        question:
+          title: Question
+          type: string
+        model:
+          nullable: true
+          title: Model
+          type: string
+        temperature:
+          nullable: true
+          title: Temperature
+          type: number
+        max_tokens:
+          nullable: true
+          title: Max Tokens
+          type: integer
+        brain_id:
+          format: uuid
+          nullable: true
+          title: Brain Id
+          type: string
+        prompt_id:
+          format: uuid
+          nullable: true
+          title: Prompt Id
+          type: string
+      required:
+      - question
+      title: ChatQuestion
+      type: object
+    ChatUpdatableProperties:
+      example:
+        chat_name: chat_name
+      properties:
+        chat_name:
+          nullable: true
+          title: Chat Name
+          type: string
+      title: ChatUpdatableProperties
+      type: object
+    ContactMessage:
+      example:
+        customer_email: customer_email
+        content: content
+      properties:
+        customer_email:
+          title: Customer Email
+          type: string
+        content:
+          title: Content
+          type: string
+      required:
+      - content
+      - customer_email
+      title: ContactMessage
+      type: object
+    CrawlWebsite:
+      example:
+        depth: 1
+        js: false
+        max_time: 60
+        max_pages: 100
+        url: url
+      properties:
+        url:
+          title: Url
+          type: string
+        js:
+          default: false
+          example: false
+          title: Js
+          type: boolean
+          x-konfig-original-example: false
+          x-konfig-generated-schema: konfig-generated-schema-components-schemas-CrawlWebsite-properties-js
+        depth:
+          default: 1
+          example: 1
+          title: Depth
+          type: integer
+          x-konfig-original-example: 1
+          x-konfig-generated-schema: konfig-generated-schema-components-schemas-CrawlWebsite-properties-depth
+        max_pages:
+          default: 100
+          example: 100
+          title: Max Pages
+          type: integer
+          x-konfig-original-example: 100
+          x-konfig-generated-schema: konfig-generated-schema-components-schemas-CrawlWebsite-properties-max_pages
+        max_time:
+          default: 60
+          example: 60
+          title: Max Time
+          type: integer
+          x-konfig-original-example: 60
+          x-konfig-generated-schema: konfig-generated-schema-components-schemas-CrawlWebsite-properties-max_time
+      required:
+      - url
+      title: CrawlWebsite
+      type: object
+    CreateApiBrainDefinition:
+      properties:
+        method:
+          $ref: '#/components/schemas/ApiBrainAllowedMethods'
+        url:
+          title: Url
+          type: string
+        params:
+          $ref: '#/components/schemas/ApiBrainDefinitionSchemaNullable'
+        search_params:
+          $ref: '#/components/schemas/ApiBrainDefinitionSchema'
+        secrets:
+          default: []
+          example: []
+          items:
+            $ref: '#/components/schemas/ApiBrainDefinitionSecret'
+          nullable: true
+          title: Secrets
+          type: array
+          x-konfig-original-example: []
+          x-konfig-generated-schema: konfig-generated-schema-components-schemas-CreateApiBrainDefinition-properties-secrets
+        raw:
+          default: false
+          example: false
+          nullable: true
+          title: Raw
+          type: boolean
+          x-konfig-original-example: false
+          x-konfig-generated-schema: konfig-generated-schema-components-schemas-CreateApiBrainDefinition-properties-raw
+        jq_instructions:
+          nullable: true
+          title: Jq Instructions
+          type: string
+      required:
+      - method
+      - url
+      title: CreateApiBrainDefinition
+      type: object
+      x-konfig-properties:
+        search_params:
+          default:
+            properties: []
+            required: []
+    CreateBrainProperties:
+      example:
+        brain_secrets_values: {}
+        brain_definition:
+          method: null
+          search_params:
+            properties: []
+            required: []
+          raw: false
+          jq_instructions: jq_instructions
+          params:
+            properties: []
+            required: []
+          secrets: []
+          url: url
+        max_tokens: 2000
+        connected_brains_ids: []
+        name: Default brain
+        temperature: 0
+        integration:
+          settings: "{}"
+          integration_id: integration_id
+        description: This is a description
+        model: model
+        prompt_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        brain_type: doc
+        status: private
+      properties:
+        description:
+          default: This is a description
+          example: This is a description
+          title: Description
+          type: string
+          x-konfig-original-example: This is a description
+          x-konfig-generated-schema: konfig-generated-schema-components-schemas-CreateBrainProperties-properties-description
+        name:
+          default: Default brain
+          example: Default brain
+          nullable: true
+          title: Name
+          type: string
+          x-konfig-original-example: Default brain
+          x-konfig-generated-schema: konfig-generated-schema-components-schemas-CreateBrainProperties-properties-name
+        status:
+          default: private
+          example: private
+          nullable: true
+          title: Status
+          type: string
+          x-konfig-original-example: private
+          x-konfig-generated-schema: konfig-generated-schema-components-schemas-CreateBrainProperties-properties-status
+        model:
+          nullable: true
+          title: Model
+          type: string
+        temperature:
+          default: 0
+          example: 0
+          nullable: true
+          title: Temperature
+          type: number
+          x-konfig-original-example: 0
+          x-konfig-generated-schema: konfig-generated-schema-components-schemas-CreateBrainProperties-properties-temperature
+        max_tokens:
+          default: 2000
+          example: 2000
+          nullable: true
+          title: Max Tokens
+          type: integer
+          x-konfig-original-example: 2000
+          x-konfig-generated-schema: konfig-generated-schema-components-schemas-CreateBrainProperties-properties-max_tokens
+        prompt_id:
+          format: uuid
+          nullable: true
+          title: Prompt Id
+          type: string
+        brain_type:
+          $ref: '#/components/schemas/BrainTypeNullable'
+        brain_definition:
+          $ref: '#/components/schemas/CreateApiBrainDefinitionNullable'
+        brain_secrets_values:
+          example: {}
+          nullable: true
+          title: Brain Secrets Values
+          type: object
+          x-konfig-original-example: {}
+          x-konfig-generated-schema: konfig-generated-schema-components-schemas-CreateBrainProperties-properties-brain_secrets_values
+        connected_brains_ids:
+          default: []
+          example: []
+          items:
+            format: uuid
+            type: string
+          nullable: true
+          title: Connected Brains Ids
+          type: array
+          x-konfig-original-example: []
+          x-konfig-generated-schema: konfig-generated-schema-components-schemas-CreateBrainProperties-properties-connected_brains_ids
+        integration:
+          $ref: '#/components/schemas/BrainIntegrationSettingsNullable'
+      title: CreateBrainProperties
+      type: object
+    CreateChatProperties:
+      example:
+        name: name
+      properties:
+        name:
+          title: Name
+          type: string
+      required:
+      - name
+      title: CreateChatProperties
+      type: object
+    CreatePromptProperties:
+      description: Properties that can be received on prompt creation
+      example:
+        title: title
+        content: content
+        status: null
+      properties:
+        title:
+          title: Title
+          type: string
+        content:
+          title: Content
+          type: string
+        status:
+          $ref: '#/components/schemas/PromptStatusEnum'
+      required:
+      - content
+      - title
+      title: CreatePromptProperties
+      type: object
+      x-konfig-properties:
+        status:
+          default: private
+    GetChatHistoryOutput:
+      properties:
+        chat_id:
+          format: uuid
+          nullable: true
+          title: Chat Id
+          type: string
+        message_id:
+          format: uuid
+          type: string
+        user_message:
+          title: User Message
+          type: string
+        assistant:
+          title: Assistant
+          type: string
+        message_time:
+          nullable: true
+          title: Message Time
+          type: string
+        prompt_title:
+          nullable: true
+          title: Prompt Title
+          type: string
+        brain_name:
+          nullable: true
+          title: Brain Name
+          type: string
+        brain_id:
+          nullable: true
+          title: Brain Id
+          type: string
+        metadata:
+          nullable: true
+          title: Metadata
+          type: object
+        thumbs:
+          nullable: true
+          title: Thumbs
+          type: boolean
+        id:
+          format: uuid
+          title: Id
+          type: string
+        datetime:
+          title: Datetime
+          type: string
+        message:
+          nullable: true
+          title: Message
+          type: string
+        action:
+          title: Action
+          type: string
+        status:
+          $ref: '#/components/schemas/NotificationsStatusEnum'
+      title: GetChatHistoryOutput
+      type: object
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          title: Detail
+          type: array
+      title: HTTPValidationError
+      type: object
+      x-konfig-is-used-in-non-successful-response: true
+      x-do-not-generate: true
+    IntegrationBrainTag:
+      enum:
+      - new
+      - recommended
+      - most_popular
+      - premium
+      - coming_soon
+      - community
+      - deprecated
+      title: IntegrationBrainTag
+      type: string
+    IntegrationDescriptionEntity:
+      example:
+        integration_name: integration_name
+        max_files: 0
+        allow_model_change: true
+        connection_settings: "{}"
+        description: description
+        integration_logo_url: integration_logo_url
+        information: information
+        id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        integration_display_name: integration_display_name
+        integration_type: null
+        tags: []
+      properties:
+        tags:
+          default: []
+          example: []
+          items:
+            $ref: '#/components/schemas/IntegrationBrainTag'
+          nullable: true
+          title: Tags
+          type: array
+          x-konfig-original-example: []
+          x-konfig-generated-schema: konfig-generated-schema-components-schemas-IntegrationDescriptionEntity-properties-tags
+        description:
+          title: Description
+          type: string
+        id:
+          format: uuid
+          title: Id
+          type: string
+        integration_name:
+          title: Integration Name
+          type: string
+        integration_logo_url:
+          nullable: true
+          title: Integration Logo Url
+          type: string
+        connection_settings:
+          nullable: true
+          title: Connection Settings
+          type: object
+        integration_type:
+          $ref: '#/components/schemas/IntegrationType'
+        information:
+          nullable: true
+          title: Information
+          type: string
+        max_files:
+          title: Max Files
+          type: integer
+        allow_model_change:
+          title: Allow Model Change
+          type: boolean
+        integration_display_name:
+          title: Integration Display Name
+          type: string
+      required:
+      - allow_model_change
+      - description
+      - id
+      - integration_display_name
+      - integration_name
+      - integration_type
+      - max_files
+      title: IntegrationDescriptionEntity
+      type: object
+    IntegrationType:
+      enum:
+      - custom
+      - sync
+      - doc
+      title: IntegrationType
+      type: string
+    Notification:
+      properties:
+        id:
+          format: uuid
+          title: Id
+          type: string
+        datetime:
+          title: Datetime
+          type: string
+        chat_id:
+          format: uuid
+          nullable: true
+          title: Chat Id
+          type: string
+        message:
+          nullable: true
+          title: Message
+          type: string
+        action:
+          title: Action
+          type: string
+        status:
+          $ref: '#/components/schemas/NotificationsStatusEnum'
+      required:
+      - action
+      - datetime
+      - id
+      - status
+      title: Notification
+      type: object
+    NotificationsStatusEnum:
+      enum:
+      - Pending
+      - Done
+      title: NotificationsStatusEnum
+      type: string
+    OnboardingStates:
+      description: Response when getting onboarding
+      example:
+        onboarding_a: true
+        onboarding_b3: true
+        onboarding_b2: true
+        onboarding_b1: true
+      properties:
+        onboarding_a:
+          title: Onboarding A
+          type: boolean
+        onboarding_b1:
+          title: Onboarding B1
+          type: boolean
+        onboarding_b2:
+          title: Onboarding B2
+          type: boolean
+        onboarding_b3:
+          title: Onboarding B3
+          type: boolean
+      required:
+      - onboarding_a
+      - onboarding_b1
+      - onboarding_b2
+      - onboarding_b3
+      title: OnboardingStates
+      type: object
+      x-konfig-is-used-in-successful-response: true
+    OnboardingUpdatableProperties:
+      description: Properties that can be received on onboarding update
+      example:
+        onboarding_a: true
+        onboarding_b3: true
+        onboarding_b2: true
+        onboarding_b1: true
+      properties:
+        onboarding_a:
+          nullable: true
+          title: Onboarding A
+          type: boolean
+        onboarding_b1:
+          nullable: true
+          title: Onboarding B1
+          type: boolean
+        onboarding_b2:
+          nullable: true
+          title: Onboarding B2
+          type: boolean
+        onboarding_b3:
+          nullable: true
+          title: Onboarding B3
+          type: boolean
+      title: OnboardingUpdatableProperties
+      type: object
+    Prompt:
+      example:
+        id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        title: title
+        content: content
+        status: null
+      properties:
+        title:
+          title: Title
+          type: string
+        content:
+          title: Content
+          type: string
+        status:
+          $ref: '#/components/schemas/PromptStatusEnum'
+        id:
+          format: uuid
+          title: Id
+          type: string
+      required:
+      - content
+      - id
+      - title
+      title: Prompt
+      type: object
+      x-konfig-properties:
+        status:
+          default: private
+    PromptStatusEnum:
+      enum:
+      - private
+      - public
+      title: PromptStatusEnum
+      type: string
+    PromptUpdatableProperties:
+      description: Properties that can be received on prompt update
+      example:
+        title: title
+        content: content
+        status: null
+      properties:
+        title:
+          nullable: true
+          title: Title
+          type: string
+        content:
+          nullable: true
+          title: Content
+          type: string
+        status:
+          $ref: '#/components/schemas/PromptStatusEnumNullable'
+      title: PromptUpdatableProperties
+      type: object
+    PublicBrain:
+      example:
+        brain_definition:
+          method: null
+          search_params:
+            properties: []
+            required: []
+          raw: false
+          jq_instructions: jq_instructions
+          params:
+            properties: []
+            required: []
+          secrets:
+          - name: name
+            description: description
+            type: type
+          - name: name
+            description: description
+            type: type
+          brain_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          url: url
+        last_update: last_update
+        name: name
+        description: description
+        number_of_subscribers: 0
+        id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        brain_type: null
+      properties:
+        description:
+          nullable: true
+          title: Description
+          type: string
+        id:
+          format: uuid
+          title: Id
+          type: string
+        name:
+          title: Name
+          type: string
+        number_of_subscribers:
+          default: 0
+          example: 0
+          title: Number Of Subscribers
+          type: integer
+          x-konfig-original-example: 0
+          x-konfig-generated-schema: konfig-generated-schema-components-schemas-PublicBrain-properties-number_of_subscribers
+        last_update:
+          title: Last Update
+          type: string
+        brain_type:
+          $ref: '#/components/schemas/BrainType'
+        brain_definition:
+          $ref: '#/components/schemas/ApiBrainDefinitionEntity-OutputNullable'
+      required:
+      - brain_type
+      - id
+      - last_update
+      - name
+      title: PublicBrain
+      type: object
+    QuestionAndAnswer:
+      example:
+        question: question
+        answer: answer
+      properties:
+        question:
+          title: Question
+          type: string
+        answer:
+          title: Answer
+          type: string
+      required:
+      - answer
+      - question
+      title: QuestionAndAnswer
+      type: object
+    UserIdentity:
+      example:
+        onboarded: true
+        company: company
+        id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        email: email
+        usage_purpose: usage_purpose
+        username: username
+        company_size: company_size
+      properties:
+        id:
+          format: uuid
+          title: Id
+          type: string
+        email:
+          nullable: true
+          title: Email
+          type: string
+        username:
+          nullable: true
+          title: Username
+          type: string
+        company:
+          nullable: true
+          title: Company
+          type: string
+        onboarded:
+          nullable: true
+          title: Onboarded
+          type: boolean
+        company_size:
+          nullable: true
+          title: Company Size
+          type: string
+        usage_purpose:
+          nullable: true
+          title: Usage Purpose
+          type: string
+      required:
+      - id
+      title: UserIdentity
+      type: object
+      x-konfig-is-used-in-successful-response: true
+    UserUpdatableProperties:
+      example:
+        onboarded: true
+        company: company
+        usage_purpose: usage_purpose
+        username: username
+        company_size: company_size
+      properties:
+        username:
+          nullable: true
+          title: Username
+          type: string
+        company:
+          nullable: true
+          title: Company
+          type: string
+        onboarded:
+          nullable: true
+          title: Onboarded
+          type: boolean
+        company_size:
+          nullable: true
+          title: Company Size
+          type: string
+        usage_purpose:
+          nullable: true
+          title: Usage Purpose
+          type: string
+      title: UserUpdatableProperties
+      type: object
+    ValidationError:
+      properties:
+        loc:
+          items: {}
+          title: Location
+          type: array
+        msg:
+          title: Message
+          type: string
+        type:
+          title: Error Type
+          type: string
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+      type: object
+    ChatNullable:
+      example:
+        creation_time: creation_time
+        user_id: user_id
+        chat_id: chat_id
+        chat_name: chat_name
+      nullable: true
+      properties:
+        chat_id:
+          title: Chat Id
+          type: string
+        user_id:
+          title: User Id
+          type: string
+        creation_time:
+          title: Creation Time
+          type: string
+        chat_name:
+          title: Chat Name
+          type: string
+      required:
+      - chat_id
+      - chat_name
+      - creation_time
+      - user_id
+      title: Response Add Question And Answer Handler Chat  Chat Id  Question Answer
+        Post
+      type: object
+      x-konfig-is-used-in-successful-response: true
+    OnboardingStatesNullable:
+      description: Response when getting onboarding
+      example:
+        onboarding_a: true
+        onboarding_b3: true
+        onboarding_b2: true
+        onboarding_b1: true
+      nullable: true
+      properties:
+        onboarding_a:
+          title: Onboarding A
+          type: boolean
+        onboarding_b1:
+          title: Onboarding B1
+          type: boolean
+        onboarding_b2:
+          title: Onboarding B2
+          type: boolean
+        onboarding_b3:
+          title: Onboarding B3
+          type: boolean
+      required:
+      - onboarding_a
+      - onboarding_b1
+      - onboarding_b2
+      - onboarding_b3
+      title: Response Get User Onboarding Handler Onboarding Get
+      type: object
+      x-konfig-is-used-in-successful-response: true
+    PromptNullable:
+      example:
+        id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        title: title
+        content: content
+        status: null
+      nullable: true
+      properties:
+        title:
+          title: Title
+          type: string
+        content:
+          title: Content
+          type: string
+        status:
+          $ref: '#/components/schemas/PromptStatusEnum'
+        id:
+          format: uuid
+          title: Id
+          type: string
+      required:
+      - content
+      - id
+      - title
+      title: Response Update Prompt Prompts  Prompt Id  Put
+      type: object
+      x-konfig-properties:
+        status:
+          default: private
+      x-konfig-is-used-in-successful-response: true
+    ApiBrainDefinitionEntity-InputNullable:
+      example:
+        method: null
+        search_params:
+          properties: []
+          required: []
+        raw: false
+        jq_instructions: jq_instructions
+        params:
+          properties: []
+          required: []
+        secrets:
+        - name: name
+          description: description
+          type: type
+        - name: name
+          description: description
+          type: type
+        brain_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        url: url
+      nullable: true
+      properties:
+        brain_id:
+          format: uuid
+          title: Brain Id
+          type: string
+        method:
+          $ref: '#/components/schemas/ApiBrainAllowedMethods'
+        url:
+          title: Url
+          type: string
+        params:
+          $ref: '#/components/schemas/ApiBrainDefinitionSchema'
+        search_params:
+          $ref: '#/components/schemas/ApiBrainDefinitionSchema'
+        secrets:
+          items:
+            $ref: '#/components/schemas/ApiBrainDefinitionSecret'
+          title: Secrets
+          type: array
+        raw:
+          default: false
+          example: false
+          title: Raw
+          type: boolean
+          x-konfig-original-example: false
+          x-konfig-generated-schema: konfig-generated-schema-components-schemas-ApiBrainDefinitionEntity-InputNullable-properties-raw
+        jq_instructions:
+          nullable: true
+          title: Jq Instructions
+          type: string
+      required:
+      - brain_id
+      - method
+      - params
+      - search_params
+      - secrets
+      - url
+      title: ApiBrainDefinitionEntity
+      type: object
+    BrainIntegrationUpdateSettingsNullable:
+      example:
+        settings: "{}"
+      nullable: true
+      properties:
+        settings:
+          title: Settings
+          type: object
+      required:
+      - settings
+      title: BrainIntegrationUpdateSettings
+      type: object
+    ApiBrainDefinitionSchemaNullable:
+      default:
+        properties: []
+        required: []
+      example:
+        properties: []
+        required: []
+      nullable: true
+      properties:
+        properties:
+          default: []
+          example: []
+          items:
+            $ref: '#/components/schemas/ApiBrainDefinitionSchemaProperty'
+          title: Properties
+          type: array
+          x-konfig-original-example: []
+          x-konfig-generated-schema: konfig-generated-schema-components-schemas-ApiBrainDefinitionSchemaNullable-properties-properties
+        required:
+          default: []
+          example: []
+          items:
+            type: string
+          title: Required
+          type: array
+          x-konfig-original-example: []
+          x-konfig-generated-schema: konfig-generated-schema-components-schemas-ApiBrainDefinitionSchemaNullable-properties-required
+      title: ApiBrainDefinitionSchema
+      type: object
+      x-konfig-original-example:
+        properties: []
+        required: []
+      x-konfig-generated-schema: konfig-generated-schema-components-schemas-ApiBrainDefinitionSchemaNullable
+    BrainTypeNullable:
+      default: doc
+      enum:
+      - doc
+      - api
+      - composite
+      - integration
+      example: doc
+      nullable: true
+      title: BrainType
+      type: string
+      x-konfig-original-example: doc
+      x-konfig-generated-schema: konfig-generated-schema-components-schemas-BrainTypeNullable
+    CreateApiBrainDefinitionNullable:
+      example:
+        method: null
+        search_params:
+          properties: []
+          required: []
+        raw: false
+        jq_instructions: jq_instructions
+        params:
+          properties: []
+          required: []
+        secrets: []
+        url: url
+      nullable: true
+      properties:
+        method:
+          $ref: '#/components/schemas/ApiBrainAllowedMethods'
+        url:
+          title: Url
+          type: string
+        params:
+          $ref: '#/components/schemas/ApiBrainDefinitionSchemaNullable'
+        search_params:
+          $ref: '#/components/schemas/ApiBrainDefinitionSchema'
+        secrets:
+          default: []
+          example: []
+          items:
+            $ref: '#/components/schemas/ApiBrainDefinitionSecret'
+          nullable: true
+          title: Secrets
+          type: array
+          x-konfig-original-example: []
+          x-konfig-generated-schema: konfig-generated-schema-components-schemas-CreateApiBrainDefinitionNullable-properties-secrets
+        raw:
+          default: false
+          example: false
+          nullable: true
+          title: Raw
+          type: boolean
+          x-konfig-original-example: false
+          x-konfig-generated-schema: konfig-generated-schema-components-schemas-CreateApiBrainDefinitionNullable-properties-raw
+        jq_instructions:
+          nullable: true
+          title: Jq Instructions
+          type: string
+      required:
+      - method
+      - url
+      title: CreateApiBrainDefinition
+      type: object
+      x-konfig-properties:
+        search_params:
+          default:
+            properties: []
+            required: []
+    BrainIntegrationSettingsNullable:
+      example:
+        settings: "{}"
+        integration_id: integration_id
+      nullable: true
+      properties:
+        integration_id:
+          title: Integration Id
+          type: string
+        settings:
+          title: Settings
+          type: object
+      required:
+      - integration_id
+      - settings
+      title: BrainIntegrationSettings
+      type: object
+    PromptStatusEnumNullable:
+      enum:
+      - private
+      - public
+      nullable: true
+      title: PromptStatusEnum
+      type: string
+    ApiBrainDefinitionEntity-OutputNullable:
+      example:
+        method: null
+        search_params:
+          properties: []
+          required: []
+        raw: false
+        jq_instructions: jq_instructions
+        params:
+          properties: []
+          required: []
+        secrets:
+        - name: name
+          description: description
+          type: type
+        - name: name
+          description: description
+          type: type
+        brain_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        url: url
+      nullable: true
+      properties:
+        brain_id:
+          format: uuid
+          title: Brain Id
+          type: string
+        method:
+          $ref: '#/components/schemas/ApiBrainAllowedMethods'
+        url:
+          title: Url
+          type: string
+        params:
+          $ref: '#/components/schemas/ApiBrainDefinitionSchema'
+        search_params:
+          $ref: '#/components/schemas/ApiBrainDefinitionSchema'
+        secrets:
+          items:
+            $ref: '#/components/schemas/ApiBrainDefinitionSecret'
+          title: Secrets
+          type: array
+        raw:
+          default: false
+          example: false
+          title: Raw
+          type: boolean
+          x-konfig-original-example: false
+          x-konfig-generated-schema: konfig-generated-schema-components-schemas-ApiBrainDefinitionEntity-OutputNullable-properties-raw
+        jq_instructions:
+          nullable: true
+          title: Jq Instructions
+          type: string
+      required:
+      - brain_id
+      - method
+      - params
+      - search_params
+      - secrets
+      - url
+      title: ApiBrainDefinitionEntity
+      type: object
+    BrainUpdateSecretsValuesRequest:
+      additionalProperties:
+        type: string
+      title: Secrets
+      type: object
+    BrainSubscriptionInviteUsersToBrainRequest:
+      items:
+        type: object
+      title: Users
+      type: array
+    SubscriptionBrainHandlerRequest:
+      example: {}
+      title: Secrets
+      type: object
+      x-konfig-original-example: {}
+      x-konfig-generated-schema: konfig-generated-schema-components-schemas-SubscriptionBrainHandlerRequest
+    BrainGetAllPublicResponse:
+      items:
+        $ref: '#/components/schemas/PublicBrain'
+      title: Response Retrieve Public Brains Brains Public Get
+      type: array
+      x-konfig-is-used-in-successful-response: true
+    BrainUpdateSecretsValuesResponse:
+      example: {}
+      properties: {}
+      type: object
+      x-konfig-original-example: {}
+      x-konfig-generated-schema: konfig-generated-schema-components-schemas-BrainUpdateSecretsValuesResponse
+      x-konfig-is-used-in-successful-response: true
+    BrainSetDefaultResponse:
+      example: {}
+      properties: {}
+      type: object
+      x-konfig-original-example: {}
+      x-konfig-generated-schema: konfig-generated-schema-components-schemas-BrainSetDefaultResponse
+      x-konfig-is-used-in-successful-response: true
+    BrainGetQuestionContextResponse:
+      example: {}
+      properties: {}
+      type: object
+      x-konfig-original-example: {}
+      x-konfig-generated-schema: konfig-generated-schema-components-schemas-BrainGetQuestionContextResponse
+      x-konfig-is-used-in-successful-response: true
+    HealthCheckStatusResponse:
+      example: {}
+      properties: {}
+      type: object
+      x-konfig-original-example: {}
+      x-konfig-generated-schema: konfig-generated-schema-components-schemas-HealthCheckStatusResponse
+      x-konfig-is-used-in-successful-response: true
+    ChatGetAllChatsResponse:
+      example: {}
+      properties: {}
+      type: object
+      x-konfig-original-example: {}
+      x-konfig-generated-schema: konfig-generated-schema-components-schemas-ChatGetAllChatsResponse
+      x-konfig-is-used-in-successful-response: true
+    ChatCreateHandlerResponse:
+      example: {}
+      properties: {}
+      type: object
+      x-konfig-original-example: {}
+      x-konfig-generated-schema: konfig-generated-schema-components-schemas-ChatCreateHandlerResponse
+      x-konfig-is-used-in-successful-response: true
+    ChatDeleteChatByIdResponse:
+      example: {}
+      properties: {}
+      type: object
+      x-konfig-original-example: {}
+      x-konfig-generated-schema: konfig-generated-schema-components-schemas-ChatDeleteChatByIdResponse
+      x-konfig-is-used-in-successful-response: true
+    ChatUpdateMetadataHandlerResponse:
+      example: {}
+      properties: {}
+      type: object
+      x-konfig-original-example: {}
+      x-konfig-generated-schema: konfig-generated-schema-components-schemas-ChatUpdateMetadataHandlerResponse
+      x-konfig-is-used-in-successful-response: true
+    ChatUpdateMessageResponse:
+      example: {}
+      properties: {}
+      type: object
+      x-konfig-original-example: {}
+      x-konfig-generated-schema: konfig-generated-schema-components-schemas-ChatUpdateMessageResponse
+      x-konfig-is-used-in-successful-response: true
+    ChatHandleQuestionResponse:
+      example: {}
+      properties: {}
+      type: object
+      x-konfig-original-example: {}
+      x-konfig-generated-schema: konfig-generated-schema-components-schemas-ChatHandleQuestionResponse
+      x-konfig-is-used-in-successful-response: true
+    ChatCreateStreamQuestionHandlerResponse:
+      example: {}
+      properties: {}
+      type: object
+      x-konfig-original-example: {}
+      x-konfig-generated-schema: konfig-generated-schema-components-schemas-ChatCreateStreamQuestionHandlerResponse
+      x-konfig-is-used-in-successful-response: true
+    ChatGetHistoryResponse:
+      items:
+        $ref: '#/components/schemas/ChatItem'
+      title: Response Get Chat History Handler Chat  Chat Id  History Get
+      type: array
+      x-konfig-is-used-in-successful-response: true
+    HealthCheckStatus200Response:
+      example: {}
+      properties: {}
+      type: object
+      x-konfig-original-example: {}
+      x-konfig-generated-schema: konfig-generated-schema-components-schemas-HealthCheckStatus200Response
+      x-konfig-is-used-in-successful-response: true
+    CrawlWebsiteDataProcessorResponse:
+      example: {}
+      properties: {}
+      type: object
+      x-konfig-original-example: {}
+      x-konfig-generated-schema: konfig-generated-schema-components-schemas-CrawlWebsiteDataProcessorResponse
+      x-konfig-is-used-in-successful-response: true
+    RootStatusCheckResponse:
+      example: {}
+      properties: {}
+      type: object
+      x-konfig-original-example: {}
+      x-konfig-generated-schema: konfig-generated-schema-components-schemas-RootStatusCheckResponse
+      x-konfig-is-used-in-successful-response: true
+    UploadFilePostResponse:
+      example: {}
+      properties: {}
+      type: object
+      x-konfig-original-example: {}
+      x-konfig-generated-schema: konfig-generated-schema-components-schemas-UploadFilePostResponse
+      x-konfig-is-used-in-successful-response: true
+    UserGetUserInformationResponse:
+      example: {}
+      properties: {}
+      type: object
+      x-konfig-original-example: {}
+      x-konfig-generated-schema: konfig-generated-schema-components-schemas-UserGetUserInformationResponse
+      x-konfig-is-used-in-successful-response: true
+    ApiKeyDeleteKeyResponse:
+      example: {}
+      properties: {}
+      type: object
+      x-konfig-original-example: {}
+      x-konfig-generated-schema: konfig-generated-schema-components-schemas-ApiKeyDeleteKeyResponse
+      x-konfig-is-used-in-successful-response: true
+    ApiKeyGetListResponse:
+      items:
+        $ref: '#/components/schemas/ApiKeyInfo'
+      title: Response Get Api Keys Api Keys Get
+      type: array
+      x-konfig-is-used-in-successful-response: true
+    BrainRemoveUserSubscriptionResponse:
+      example: {}
+      properties: {}
+      type: object
+      x-konfig-original-example: {}
+      x-konfig-generated-schema: konfig-generated-schema-components-schemas-BrainRemoveUserSubscriptionResponse
+      x-konfig-is-used-in-successful-response: true
+    BrainSubscriptionGetUserInvitationResponse:
+      example: {}
+      properties: {}
+      type: object
+      x-konfig-original-example: {}
+      x-konfig-generated-schema: konfig-generated-schema-components-schemas-BrainSubscriptionGetUserInvitationResponse
+      x-konfig-is-used-in-successful-response: true
+    BrainSubscriptionInviteUsersToBrainResponse:
+      example: {}
+      properties: {}
+      type: object
+      x-konfig-original-example: {}
+      x-konfig-generated-schema: konfig-generated-schema-components-schemas-BrainSubscriptionInviteUsersToBrainResponse
+      x-konfig-is-used-in-successful-response: true
+    BrainUpdateSubscriptionResponse:
+      example: {}
+      properties: {}
+      type: object
+      x-konfig-original-example: {}
+      x-konfig-generated-schema: konfig-generated-schema-components-schemas-BrainUpdateSubscriptionResponse
+      x-konfig-is-used-in-successful-response: true
+    BrainGetUsersResponse:
+      example: {}
+      properties: {}
+      type: object
+      x-konfig-original-example: {}
+      x-konfig-generated-schema: konfig-generated-schema-components-schemas-BrainGetUsersResponse
+      x-konfig-is-used-in-successful-response: true
+    BrainAcceptInvitationResponse:
+      example: {}
+      properties: {}
+      type: object
+      x-konfig-original-example: {}
+      x-konfig-generated-schema: konfig-generated-schema-components-schemas-BrainAcceptInvitationResponse
+      x-konfig-is-used-in-successful-response: true
+    BrainDeclineInvitationResponse:
+      example: {}
+      properties: {}
+      type: object
+      x-konfig-original-example: {}
+      x-konfig-generated-schema: konfig-generated-schema-components-schemas-BrainDeclineInvitationResponse
+      x-konfig-is-used-in-successful-response: true
+    SubscriptionBrainHandlerResponse:
+      example: {}
+      properties: {}
+      type: object
+      x-konfig-original-example: {}
+      x-konfig-generated-schema: konfig-generated-schema-components-schemas-SubscriptionBrainHandlerResponse
+      x-konfig-is-used-in-successful-response: true
+    SubscriptionUnregisterHandlerResponse:
+      example: {}
+      properties: {}
+      type: object
+      x-konfig-original-example: {}
+      x-konfig-generated-schema: konfig-generated-schema-components-schemas-SubscriptionUnregisterHandlerResponse
+      x-konfig-is-used-in-successful-response: true
+    PromptGetAllPublicPromptsResponse:
+      items:
+        $ref: '#/components/schemas/Prompt'
+      title: Response Get Prompts Prompts Get
+      type: array
+      x-konfig-is-used-in-successful-response: true
+    NotificationGetByChatIdResponse:
+      example: {}
+      properties: {}
+      type: object
+      x-konfig-original-example: {}
+      x-konfig-generated-schema: konfig-generated-schema-components-schemas-NotificationGetByChatIdResponse
+      x-konfig-is-used-in-successful-response: true
+    KnowledgeGetAllKnowledgeResponse:
+      example: {}
+      properties: {}
+      type: object
+      x-konfig-original-example: {}
+      x-konfig-generated-schema: konfig-generated-schema-components-schemas-KnowledgeGetAllKnowledgeResponse
+      x-konfig-is-used-in-successful-response: true
+    KnowledgeDeleteSpecificBrainKnowledgeResponse:
+      example: {}
+      properties: {}
+      type: object
+      x-konfig-original-example: {}
+      x-konfig-generated-schema: konfig-generated-schema-components-schemas-KnowledgeDeleteSpecificBrainKnowledgeResponse
+      x-konfig-is-used-in-successful-response: true
+    KnowledgeGenerateSignedUrlResponse:
+      example: {}
+      properties: {}
+      type: object
+      x-konfig-original-example: {}
+      x-konfig-generated-schema: konfig-generated-schema-components-schemas-KnowledgeGenerateSignedUrlResponse
+      x-konfig-is-used-in-successful-response: true
+    ContactCreateNewContactResponse:
+      example: {}
+      properties: {}
+      type: object
+      x-konfig-original-example: {}
+      x-konfig-generated-schema: konfig-generated-schema-components-schemas-ContactCreateNewContactResponse
+      x-konfig-is-used-in-successful-response: true
+    BrainGetDescriptionResponse:
+      items:
+        $ref: '#/components/schemas/IntegrationDescriptionEntity'
+      title: Response Get Integration Brain Description Brains Integrations  Get
+      type: array
+      x-konfig-is-used-in-successful-response: true
+    BrainGetAllForUserResponse:
+      example: {}
+      properties: {}
+      type: object
+      x-konfig-original-example: {}
+      x-konfig-generated-schema: konfig-generated-schema-components-schemas-BrainGetAllForUserResponse
+      x-konfig-is-used-in-successful-response: true
+    BrainCreateNewBrainResponse:
+      example: {}
+      properties: {}
+      type: object
+      x-konfig-original-example: {}
+      x-konfig-generated-schema: konfig-generated-schema-components-schemas-BrainCreateNewBrainResponse
+      x-konfig-is-used-in-successful-response: true
+    BrainGetDefaultBrainResponse:
+      example: {}
+      properties: {}
+      type: object
+      x-konfig-original-example: {}
+      x-konfig-generated-schema: konfig-generated-schema-components-schemas-BrainGetDefaultBrainResponse
+      x-konfig-is-used-in-successful-response: true
+    BrainGetByIdResponse:
+      example: {}
+      properties: {}
+      type: object
+      x-konfig-original-example: {}
+      x-konfig-generated-schema: konfig-generated-schema-components-schemas-BrainGetByIdResponse
+      x-konfig-is-used-in-successful-response: true
+    BrainUpdateConfigurationResponse:
+      example: {}
+      properties: {}
+      type: object
+      x-konfig-original-example: {}
+      x-konfig-generated-schema: konfig-generated-schema-components-schemas-BrainUpdateConfigurationResponse
+      x-konfig-is-used-in-successful-response: true
+    konfig-generated-schema-components-schemas-ApiBrainDefinitionEntity-Input-properties-raw:
+      example: false
+      type: boolean
+      x-do-not-generate: true
+    konfig-generated-schema-components-schemas-ApiBrainDefinitionEntity-Output-properties-raw:
+      example: false
+      type: boolean
+      x-do-not-generate: true
+    konfig-generated-schema-components-schemas-ApiBrainDefinitionSchema-properties-properties:
+      items:
+        type: string
+      type: array
+      x-do-not-generate: true
+    konfig-generated-schema-components-schemas-ApiBrainDefinitionSchema-properties-required:
+      items:
+        type: string
+      type: array
+      x-do-not-generate: true
+    konfig-generated-schema-components-schemas-BrainUpdatableProperties-properties-connected_brains_ids:
+      items:
+        type: string
+      type: array
+      x-do-not-generate: true
+    konfig-generated-schema-components-schemas-CrawlWebsite-properties-js:
+      example: false
+      type: boolean
+      x-do-not-generate: true
+    konfig-generated-schema-components-schemas-CrawlWebsite-properties-depth:
+      example: 1
+      type: number
+      x-do-not-generate: true
+    konfig-generated-schema-components-schemas-CrawlWebsite-properties-max_pages:
+      example: 100
+      type: number
+      x-do-not-generate: true
+    konfig-generated-schema-components-schemas-CrawlWebsite-properties-max_time:
+      example: 60
+      type: number
+      x-do-not-generate: true
+    konfig-generated-schema-components-schemas-CreateApiBrainDefinition-properties-secrets:
+      items:
+        type: string
+      type: array
+      x-do-not-generate: true
+    konfig-generated-schema-components-schemas-CreateApiBrainDefinition-properties-raw:
+      example: false
+      type: boolean
+      x-do-not-generate: true
+    konfig-generated-schema-components-schemas-CreateBrainProperties-properties-description:
+      example: This is a description
+      type: string
+      x-do-not-generate: true
+    konfig-generated-schema-components-schemas-CreateBrainProperties-properties-name:
+      example: Default brain
+      type: string
+      x-do-not-generate: true
+    konfig-generated-schema-components-schemas-CreateBrainProperties-properties-status:
+      example: private
+      type: string
+      x-do-not-generate: true
+    konfig-generated-schema-components-schemas-CreateBrainProperties-properties-temperature:
+      example: 0
+      type: number
+      x-do-not-generate: true
+    konfig-generated-schema-components-schemas-CreateBrainProperties-properties-max_tokens:
+      example: 2000
+      type: number
+      x-do-not-generate: true
+    konfig-generated-schema-components-schemas-CreateBrainProperties-properties-brain_secrets_values:
+      example: {}
+      properties: {}
+      type: object
+      x-do-not-generate: true
+    konfig-generated-schema-components-schemas-CreateBrainProperties-properties-connected_brains_ids:
+      items:
+        type: string
+      type: array
+      x-do-not-generate: true
+    konfig-generated-schema-components-schemas-IntegrationDescriptionEntity-properties-tags:
+      items:
+        type: string
+      type: array
+      x-do-not-generate: true
+    konfig-generated-schema-components-schemas-PublicBrain-properties-number_of_subscribers:
+      example: 0
+      type: number
+      x-do-not-generate: true
+    konfig-generated-schema-components-schemas-ApiBrainDefinitionEntity-InputNullable-properties-raw:
+      example: false
+      type: boolean
+      x-do-not-generate: true
+    konfig-generated-schema-components-schemas-ApiBrainDefinitionSchemaNullable:
+      example:
+        properties: []
+        required: []
+      properties:
+        properties:
+          items:
+            type: string
+          type: array
+        required:
+          items:
+            type: string
+          type: array
+      type: object
+      x-do-not-generate: true
+    konfig-generated-schema-components-schemas-ApiBrainDefinitionSchemaNullable-properties-properties:
+      items:
+        type: string
+      type: array
+      x-do-not-generate: true
+    konfig-generated-schema-components-schemas-ApiBrainDefinitionSchemaNullable-properties-required:
+      items:
+        type: string
+      type: array
+      x-do-not-generate: true
+    konfig-generated-schema-components-schemas-BrainTypeNullable:
+      example: doc
+      type: string
+      x-do-not-generate: true
+    konfig-generated-schema-components-schemas-CreateApiBrainDefinitionNullable-properties-secrets:
+      items:
+        type: string
+      type: array
+      x-do-not-generate: true
+    konfig-generated-schema-components-schemas-CreateApiBrainDefinitionNullable-properties-raw:
+      example: false
+      type: boolean
+      x-do-not-generate: true
+    konfig-generated-schema-components-schemas-ApiBrainDefinitionEntity-OutputNullable-properties-raw:
+      example: false
+      type: boolean
+      x-do-not-generate: true
+    konfig-generated-schema-components-schemas-SubscriptionBrainHandlerRequest:
+      example: {}
+      properties: {}
+      type: object
+      x-do-not-generate: true
+    konfig-generated-schema-components-schemas-BrainUpdateSecretsValuesResponse:
+      example: {}
+      properties: {}
+      type: object
+      x-do-not-generate: true
+    konfig-generated-schema-components-schemas-BrainSetDefaultResponse:
+      example: {}
+      properties: {}
+      type: object
+      x-do-not-generate: true
+    konfig-generated-schema-components-schemas-BrainGetQuestionContextResponse:
+      example: {}
+      properties: {}
+      type: object
+      x-do-not-generate: true
+    konfig-generated-schema-components-schemas-HealthCheckStatusResponse:
+      example: {}
+      properties: {}
+      type: object
+      x-do-not-generate: true
+    konfig-generated-schema-components-schemas-ChatGetAllChatsResponse:
+      example: {}
+      properties: {}
+      type: object
+      x-do-not-generate: true
+    konfig-generated-schema-components-schemas-ChatCreateHandlerResponse:
+      example: {}
+      properties: {}
+      type: object
+      x-do-not-generate: true
+    konfig-generated-schema-components-schemas-ChatDeleteChatByIdResponse:
+      example: {}
+      properties: {}
+      type: object
+      x-do-not-generate: true
+    konfig-generated-schema-components-schemas-ChatUpdateMetadataHandlerResponse:
+      example: {}
+      properties: {}
+      type: object
+      x-do-not-generate: true
+    konfig-generated-schema-components-schemas-ChatUpdateMessageResponse:
+      example: {}
+      properties: {}
+      type: object
+      x-do-not-generate: true
+    konfig-generated-schema-components-schemas-ChatHandleQuestionResponse:
+      example: {}
+      properties: {}
+      type: object
+      x-do-not-generate: true
+    konfig-generated-schema-components-schemas-ChatCreateStreamQuestionHandlerResponse:
+      example: {}
+      properties: {}
+      type: object
+      x-do-not-generate: true
+    konfig-generated-schema-components-schemas-HealthCheckStatus200Response:
+      example: {}
+      properties: {}
+      type: object
+      x-do-not-generate: true
+    konfig-generated-schema-components-schemas-CrawlWebsiteDataProcessorResponse:
+      example: {}
+      properties: {}
+      type: object
+      x-do-not-generate: true
+    konfig-generated-schema-components-schemas-RootStatusCheckResponse:
+      example: {}
+      properties: {}
+      type: object
+      x-do-not-generate: true
+    konfig-generated-schema-components-schemas-UploadFilePostResponse:
+      example: {}
+      properties: {}
+      type: object
+      x-do-not-generate: true
+    konfig-generated-schema-components-schemas-UserGetUserInformationResponse:
+      example: {}
+      properties: {}
+      type: object
+      x-do-not-generate: true
+    konfig-generated-schema-components-schemas-ApiKeyDeleteKeyResponse:
+      example: {}
+      properties: {}
+      type: object
+      x-do-not-generate: true
+    konfig-generated-schema-components-schemas-BrainRemoveUserSubscriptionResponse:
+      example: {}
+      properties: {}
+      type: object
+      x-do-not-generate: true
+    konfig-generated-schema-components-schemas-BrainSubscriptionGetUserInvitationResponse:
+      example: {}
+      properties: {}
+      type: object
+      x-do-not-generate: true
+    konfig-generated-schema-components-schemas-BrainSubscriptionInviteUsersToBrainResponse:
+      example: {}
+      properties: {}
+      type: object
+      x-do-not-generate: true
+    konfig-generated-schema-components-schemas-BrainUpdateSubscriptionResponse:
+      example: {}
+      properties: {}
+      type: object
+      x-do-not-generate: true
+    konfig-generated-schema-components-schemas-BrainGetUsersResponse:
+      example: {}
+      properties: {}
+      type: object
+      x-do-not-generate: true
+    konfig-generated-schema-components-schemas-BrainAcceptInvitationResponse:
+      example: {}
+      properties: {}
+      type: object
+      x-do-not-generate: true
+    konfig-generated-schema-components-schemas-BrainDeclineInvitationResponse:
+      example: {}
+      properties: {}
+      type: object
+      x-do-not-generate: true
+    konfig-generated-schema-components-schemas-SubscriptionBrainHandlerResponse:
+      example: {}
+      properties: {}
+      type: object
+      x-do-not-generate: true
+    konfig-generated-schema-components-schemas-SubscriptionUnregisterHandlerResponse:
+      example: {}
+      properties: {}
+      type: object
+      x-do-not-generate: true
+    konfig-generated-schema-components-schemas-NotificationGetByChatIdResponse:
+      example: {}
+      properties: {}
+      type: object
+      x-do-not-generate: true
+    konfig-generated-schema-components-schemas-KnowledgeGetAllKnowledgeResponse:
+      example: {}
+      properties: {}
+      type: object
+      x-do-not-generate: true
+    konfig-generated-schema-components-schemas-KnowledgeDeleteSpecificBrainKnowledgeResponse:
+      example: {}
+      properties: {}
+      type: object
+      x-do-not-generate: true
+    konfig-generated-schema-components-schemas-KnowledgeGenerateSignedUrlResponse:
+      example: {}
+      properties: {}
+      type: object
+      x-do-not-generate: true
+    konfig-generated-schema-components-schemas-ContactCreateNewContactResponse:
+      example: {}
+      properties: {}
+      type: object
+      x-do-not-generate: true
+    konfig-generated-schema-components-schemas-BrainGetAllForUserResponse:
+      example: {}
+      properties: {}
+      type: object
+      x-do-not-generate: true
+    konfig-generated-schema-components-schemas-BrainCreateNewBrainResponse:
+      example: {}
+      properties: {}
+      type: object
+      x-do-not-generate: true
+    konfig-generated-schema-components-schemas-BrainGetDefaultBrainResponse:
+      example: {}
+      properties: {}
+      type: object
+      x-do-not-generate: true
+    konfig-generated-schema-components-schemas-BrainGetByIdResponse:
+      example: {}
+      properties: {}
+      type: object
+      x-do-not-generate: true
+    konfig-generated-schema-components-schemas-BrainUpdateConfigurationResponse:
+      example: {}
+      properties: {}
+      type: object
+      x-do-not-generate: true
+    konfig-generated-schema-single-parameter-schema-get--brains-public:
+      properties: {}
+      type: object
+      x-do-not-generate: true
+      x-konfig-is-parameter: []
+    konfig-generated-schema-single-parameter-schema-put--brains-brain_id-secrets-values:
+      properties:
+        brain_id:
+          format: uuid
+          title: Brain Id
+          type: string
+      required:
+      - brain_id
+      type: object
+      x-do-not-generate: true
+      x-konfig-is-parameter:
+      - brain_id
+    konfig-generated-schema-single-parameter-schema-post--brains-brain_id-default:
+      properties:
+        brain_id:
+          format: uuid
+          title: Brain Id
+          type: string
+      required:
+      - brain_id
+      type: object
+      x-do-not-generate: true
+      x-konfig-is-parameter:
+      - brain_id
+    konfig-generated-schema-single-parameter-schema-post--brains-brain_id-documents:
+      properties:
+        brain_id:
+          format: uuid
+          title: Brain Id
+          type: string
+        question:
+          title: Question
+          type: string
+      required:
+      - brain_id
+      - question
+      type: object
+      x-do-not-generate: true
+      x-konfig-is-parameter:
+      - brain_id
+    konfig-generated-schema-single-parameter-schema-get--chat-healthz:
+      properties: {}
+      type: object
+      x-do-not-generate: true
+      x-konfig-is-parameter: []
+    konfig-generated-schema-single-parameter-schema-get--chat:
+      properties: {}
+      type: object
+      x-do-not-generate: true
+      x-konfig-is-parameter: []
+    konfig-generated-schema-single-parameter-schema-post--chat:
+      properties:
+        name:
+          title: Name
+          type: string
+      required:
+      - name
+      type: object
+      x-do-not-generate: true
+      x-konfig-is-parameter: []
+    konfig-generated-schema-single-parameter-schema-delete--chat-chat_id:
+      properties:
+        chat_id:
+          format: uuid
+          title: Chat Id
+          type: string
+      required:
+      - chat_id
+      type: object
+      x-do-not-generate: true
+      x-konfig-is-parameter:
+      - chat_id
+    konfig-generated-schema-single-parameter-schema-put--chat-chat_id-metadata:
+      properties:
+        chat_id:
+          format: uuid
+          title: Chat Id
+          type: string
+        chat_name:
+          nullable: true
+          title: Chat Name
+          type: string
+      required:
+      - chat_id
+      type: object
+      x-do-not-generate: true
+      x-konfig-is-parameter:
+      - chat_id
+    konfig-generated-schema-single-parameter-schema-put--chat-chat_id-message_id:
+      properties:
+        chat_id:
+          format: uuid
+          title: Chat Id
+          type: string
+        message_id:
+          format: uuid
+          title: Message Id
+          type: string
+        thumbs:
+          nullable: true
+          title: Thumbs
+          type: boolean
+      required:
+      - chat_id
+      - message_id
+      - thumbs
+      type: object
+      x-do-not-generate: true
+      x-konfig-is-parameter:
+      - chat_id
+      - message_id
+    konfig-generated-schema-single-parameter-schema-get--chat-chat_id-history:
+      properties:
+        chat_id:
+          format: uuid
+          title: Chat Id
+          type: string
+      required:
+      - chat_id
+      type: object
+      x-do-not-generate: true
+      x-konfig-is-parameter:
+      - chat_id
+    konfig-generated-schema-single-parameter-schema-post--chat-chat_id-question-answer:
+      properties:
+        chat_id:
+          format: uuid
+          title: Chat Id
+          type: string
+        question:
+          title: Question
+          type: string
+        answer:
+          title: Answer
+          type: string
+      required:
+      - answer
+      - chat_id
+      - question
+      type: object
+      x-do-not-generate: true
+      x-konfig-is-parameter:
+      - chat_id
+    konfig-generated-schema-single-parameter-schema-get--crawl-healthz:
+      properties: {}
+      type: object
+      x-do-not-generate: true
+      x-konfig-is-parameter: []
+    konfig-generated-schema-single-parameter-schema-post--crawl:
+      properties:
+        brain_id:
+          description: The ID of the brain
+          format: uuid
+          title: Brain Id
+          type: string
+        chat_id:
+          description: The ID of the chat
+          format: uuid
+          nullable: true
+          title: Chat Id
+          type: string
+        url:
+          title: Url
+          type: string
+        js:
+          default: false
+          example: false
+          title: Js
+          type: boolean
+          x-konfig-original-example: false
+          x-konfig-generated-schema: konfig-generated-schema-components-schemas-CrawlWebsite-properties-js
+        depth:
+          default: 1
+          example: 1
+          title: Depth
+          type: integer
+          x-konfig-original-example: 1
+          x-konfig-generated-schema: konfig-generated-schema-components-schemas-CrawlWebsite-properties-depth
+        max_pages:
+          default: 100
+          example: 100
+          title: Max Pages
+          type: integer
+          x-konfig-original-example: 100
+          x-konfig-generated-schema: konfig-generated-schema-components-schemas-CrawlWebsite-properties-max_pages
+        max_time:
+          default: 60
+          example: 60
+          title: Max Time
+          type: integer
+          x-konfig-original-example: 60
+          x-konfig-generated-schema: konfig-generated-schema-components-schemas-CrawlWebsite-properties-max_time
+      required:
+      - brain_id
+      - url
+      type: object
+      x-do-not-generate: true
+      x-konfig-is-parameter:
+      - brain_id
+      - chat_id
+    konfig-generated-schema-single-parameter-schema-get--onboarding:
+      properties: {}
+      type: object
+      x-do-not-generate: true
+      x-konfig-is-parameter: []
+    konfig-generated-schema-single-parameter-schema-put--onboarding:
+      properties:
+        onboarding_a:
+          nullable: true
+          title: Onboarding A
+          type: boolean
+        onboarding_b1:
+          nullable: true
+          title: Onboarding B1
+          type: boolean
+        onboarding_b2:
+          nullable: true
+          title: Onboarding B2
+          type: boolean
+        onboarding_b3:
+          nullable: true
+          title: Onboarding B3
+          type: boolean
+      type: object
+      x-do-not-generate: true
+      x-konfig-is-parameter: []
+    konfig-generated-schema-single-parameter-schema-get--:
+      properties: {}
+      type: object
+      x-do-not-generate: true
+      x-konfig-is-parameter: []
+    konfig-generated-schema-single-parameter-schema-get--healthz:
+      properties: {}
+      type: object
+      x-do-not-generate: true
+      x-konfig-is-parameter: []
+    konfig-generated-schema-single-parameter-schema-get--upload-healthz:
+      properties: {}
+      type: object
+      x-do-not-generate: true
+      x-konfig-is-parameter: []
+    konfig-generated-schema-single-parameter-schema-post--upload:
+      properties:
+        brain_id:
+          description: The ID of the brain
+          format: uuid
+          title: Brain Id
+          type: string
+        chat_id:
+          description: The ID of the chat
+          format: uuid
+          nullable: true
+          title: Chat Id
+          type: string
+        uploadFile:
+          format: binary
+          title: Uploadfile
+          type: string
+      required:
+      - brain_id
+      - uploadFile
+      type: object
+      x-do-not-generate: true
+      x-konfig-is-parameter:
+      - brain_id
+      - chat_id
+    konfig-generated-schema-single-parameter-schema-get--user:
+      properties: {}
+      type: object
+      x-do-not-generate: true
+      x-konfig-is-parameter: []
+    konfig-generated-schema-single-parameter-schema-get--user-identity:
+      properties: {}
+      type: object
+      x-do-not-generate: true
+      x-konfig-is-parameter: []
+    konfig-generated-schema-single-parameter-schema-put--user-identity:
+      properties:
+        username:
+          nullable: true
+          title: Username
+          type: string
+        company:
+          nullable: true
+          title: Company
+          type: string
+        onboarded:
+          nullable: true
+          title: Onboarded
+          type: boolean
+        company_size:
+          nullable: true
+          title: Company Size
+          type: string
+        usage_purpose:
+          nullable: true
+          title: Usage Purpose
+          type: string
+      type: object
+      x-do-not-generate: true
+      x-konfig-is-parameter: []
+    konfig-generated-schema-single-parameter-schema-post--api-key:
+      properties: {}
+      type: object
+      x-do-not-generate: true
+      x-konfig-is-parameter: []
+    konfig-generated-schema-single-parameter-schema-delete--api-key-key_id:
+      properties:
+        key_id:
+          title: Key Id
+          type: string
+      required:
+      - key_id
+      type: object
+      x-do-not-generate: true
+      x-konfig-is-parameter:
+      - key_id
+    konfig-generated-schema-single-parameter-schema-get--api-keys:
+      properties: {}
+      type: object
+      x-do-not-generate: true
+      x-konfig-is-parameter: []
+    konfig-generated-schema-single-parameter-schema-delete--brains-brain_id-subscription:
+      properties:
+        brain_id:
+          format: uuid
+          title: Brain Id
+          type: string
+      required:
+      - brain_id
+      type: object
+      x-do-not-generate: true
+      x-konfig-is-parameter:
+      - brain_id
+    konfig-generated-schema-single-parameter-schema-get--brains-brain_id-subscription:
+      properties:
+        brain_id:
+          format: uuid
+          title: Brain Id
+          type: string
+      required:
+      - brain_id
+      type: object
+      x-do-not-generate: true
+      x-konfig-is-parameter:
+      - brain_id
+    konfig-generated-schema-single-parameter-schema-put--brains-brain_id-subscription:
+      properties:
+        brain_id:
+          format: uuid
+          title: Brain Id
+          type: string
+        rights:
+          nullable: true
+          title: Rights
+          type: string
+        email:
+          title: Email
+          type: string
+      required:
+      - brain_id
+      - email
+      type: object
+      x-do-not-generate: true
+      x-konfig-is-parameter:
+      - brain_id
+    konfig-generated-schema-single-parameter-schema-get--brains-brain_id-users:
+      properties:
+        brain_id:
+          format: uuid
+          title: Brain Id
+          type: string
+      required:
+      - brain_id
+      type: object
+      x-do-not-generate: true
+      x-konfig-is-parameter:
+      - brain_id
+    konfig-generated-schema-single-parameter-schema-post--brains-brain_id-subscription-accept:
+      properties:
+        brain_id:
+          format: uuid
+          title: Brain Id
+          type: string
+      required:
+      - brain_id
+      type: object
+      x-do-not-generate: true
+      x-konfig-is-parameter:
+      - brain_id
+    konfig-generated-schema-single-parameter-schema-post--brains-brain_id-subscription-decline:
+      properties:
+        brain_id:
+          format: uuid
+          title: Brain Id
+          type: string
+      required:
+      - brain_id
+      type: object
+      x-do-not-generate: true
+      x-konfig-is-parameter:
+      - brain_id
+    konfig-generated-schema-single-parameter-schema-post--brains-brain_id-subscribe:
+      properties:
+        brain_id:
+          format: uuid
+          title: Brain Id
+          type: string
+      required:
+      - brain_id
+      type: object
+      x-do-not-generate: true
+      x-konfig-is-parameter:
+      - brain_id
+    konfig-generated-schema-single-parameter-schema-post--brains-brain_id-unsubscribe:
+      properties:
+        brain_id:
+          format: uuid
+          title: Brain Id
+          type: string
+      required:
+      - brain_id
+      type: object
+      x-do-not-generate: true
+      x-konfig-is-parameter:
+      - brain_id
+    konfig-generated-schema-single-parameter-schema-get--prompts:
+      properties: {}
+      type: object
+      x-do-not-generate: true
+      x-konfig-is-parameter: []
+    konfig-generated-schema-single-parameter-schema-post--prompts:
+      properties:
+        title:
+          title: Title
+          type: string
+        content:
+          title: Content
+          type: string
+        status:
+          $ref: '#/components/schemas/PromptStatusEnum'
+      required:
+      - content
+      - title
+      type: object
+      x-do-not-generate: true
+      x-konfig-is-parameter: []
+    konfig-generated-schema-single-parameter-schema-get--prompts-prompt_id:
+      properties:
+        prompt_id:
+          format: uuid
+          title: Prompt Id
+          type: string
+      required:
+      - prompt_id
+      type: object
+      x-do-not-generate: true
+      x-konfig-is-parameter:
+      - prompt_id
+    konfig-generated-schema-single-parameter-schema-put--prompts-prompt_id:
+      properties:
+        prompt_id:
+          format: uuid
+          title: Prompt Id
+          type: string
+        title:
+          nullable: true
+          title: Title
+          type: string
+        content:
+          nullable: true
+          title: Content
+          type: string
+        status:
+          $ref: '#/components/schemas/PromptStatusEnumNullable'
+      required:
+      - prompt_id
+      type: object
+      x-do-not-generate: true
+      x-konfig-is-parameter:
+      - prompt_id
+    konfig-generated-schema-single-parameter-schema-get--notifications-chat_id:
+      properties:
+        chat_id:
+          format: uuid
+          title: Chat Id
+          type: string
+      required:
+      - chat_id
+      type: object
+      x-do-not-generate: true
+      x-konfig-is-parameter:
+      - chat_id
+    konfig-generated-schema-single-parameter-schema-get--knowledge:
+      properties:
+        brain_id:
+          description: The ID of the brain
+          format: uuid
+          title: Brain Id
+          type: string
+      required:
+      - brain_id
+      type: object
+      x-do-not-generate: true
+      x-konfig-is-parameter:
+      - brain_id
+    konfig-generated-schema-single-parameter-schema-delete--knowledge-knowledge_id:
+      properties:
+        knowledge_id:
+          format: uuid
+          title: Knowledge Id
+          type: string
+        brain_id:
+          format: uuid
+          title: Brain Id
+          type: string
+      required:
+      - brain_id
+      - knowledge_id
+      type: object
+      x-do-not-generate: true
+      x-konfig-is-parameter:
+      - knowledge_id
+      - brain_id
+    konfig-generated-schema-single-parameter-schema-get--knowledge-knowledge_id-signed_download_url:
+      properties:
+        knowledge_id:
+          format: uuid
+          title: Knowledge Id
+          type: string
+      required:
+      - knowledge_id
+      type: object
+      x-do-not-generate: true
+      x-konfig-is-parameter:
+      - knowledge_id
+    konfig-generated-schema-single-parameter-schema-post--contact:
+      properties:
+        customer_email:
+          title: Customer Email
+          type: string
+        content:
+          title: Content
+          type: string
+      required:
+      - content
+      - customer_email
+      type: object
+      x-do-not-generate: true
+      x-konfig-is-parameter: []
+    konfig-generated-schema-single-parameter-schema-get--brains-integrations:
+      properties: {}
+      type: object
+      x-do-not-generate: true
+      x-konfig-is-parameter: []
+    konfig-generated-schema-single-parameter-schema-get--brains:
+      properties: {}
+      type: object
+      x-do-not-generate: true
+      x-konfig-is-parameter: []
+    konfig-generated-schema-single-parameter-schema-post--brains:
+      properties:
+        description:
+          default: This is a description
+          example: This is a description
+          title: Description
+          type: string
+          x-konfig-original-example: This is a description
+          x-konfig-generated-schema: konfig-generated-schema-components-schemas-CreateBrainProperties-properties-description
+        name:
+          default: Default brain
+          example: Default brain
+          nullable: true
+          title: Name
+          type: string
+          x-konfig-original-example: Default brain
+          x-konfig-generated-schema: konfig-generated-schema-components-schemas-CreateBrainProperties-properties-name
+        status:
+          default: private
+          example: private
+          nullable: true
+          title: Status
+          type: string
+          x-konfig-original-example: private
+          x-konfig-generated-schema: konfig-generated-schema-components-schemas-CreateBrainProperties-properties-status
+        model:
+          nullable: true
+          title: Model
+          type: string
+        temperature:
+          default: 0
+          example: 0
+          nullable: true
+          title: Temperature
+          type: number
+          x-konfig-original-example: 0
+          x-konfig-generated-schema: konfig-generated-schema-components-schemas-CreateBrainProperties-properties-temperature
+        max_tokens:
+          default: 2000
+          example: 2000
+          nullable: true
+          title: Max Tokens
+          type: integer
+          x-konfig-original-example: 2000
+          x-konfig-generated-schema: konfig-generated-schema-components-schemas-CreateBrainProperties-properties-max_tokens
+        prompt_id:
+          format: uuid
+          nullable: true
+          title: Prompt Id
+          type: string
+        brain_type:
+          $ref: '#/components/schemas/BrainTypeNullable'
+        brain_definition:
+          $ref: '#/components/schemas/CreateApiBrainDefinitionNullable'
+        brain_secrets_values:
+          example: {}
+          nullable: true
+          title: Brain Secrets Values
+          type: object
+          x-konfig-original-example: {}
+          x-konfig-generated-schema: konfig-generated-schema-components-schemas-CreateBrainProperties-properties-brain_secrets_values
+        connected_brains_ids:
+          default: []
+          example: []
+          items:
+            format: uuid
+            type: string
+          nullable: true
+          title: Connected Brains Ids
+          type: array
+          x-konfig-original-example: []
+          x-konfig-generated-schema: konfig-generated-schema-components-schemas-CreateBrainProperties-properties-connected_brains_ids
+        integration:
+          $ref: '#/components/schemas/BrainIntegrationSettingsNullable'
+      type: object
+      x-do-not-generate: true
+      x-konfig-is-parameter: []
+    konfig-generated-schema-single-parameter-schema-get--brains-default:
+      properties: {}
+      type: object
+      x-do-not-generate: true
+      x-konfig-is-parameter: []
+    konfig-generated-schema-single-parameter-schema-get--brains-brain_id:
+      properties:
+        brain_id:
+          format: uuid
+          title: Brain Id
+          type: string
+      required:
+      - brain_id
+      type: object
+      x-do-not-generate: true
+      x-konfig-is-parameter:
+      - brain_id
+    konfig-generated-schema-single-parameter-schema-put--brains-brain_id:
+      properties:
+        brain_id:
+          format: uuid
+          title: Brain Id
+          type: string
+        description:
+          nullable: true
+          title: Description
+          type: string
+        name:
+          nullable: true
+          title: Name
+          type: string
+        temperature:
+          nullable: true
+          title: Temperature
+          type: number
+        model:
+          nullable: true
+          title: Model
+          type: string
+        max_tokens:
+          nullable: true
+          title: Max Tokens
+          type: integer
+        status:
+          nullable: true
+          title: Status
+          type: string
+        prompt_id:
+          format: uuid
+          nullable: true
+          title: Prompt Id
+          type: string
+        brain_definition:
+          $ref: '#/components/schemas/ApiBrainDefinitionEntity-InputNullable'
+        connected_brains_ids:
+          default: []
+          example: []
+          items:
+            format: uuid
+            type: string
+          nullable: true
+          title: Connected Brains Ids
+          type: array
+          x-konfig-original-example: []
+          x-konfig-generated-schema: konfig-generated-schema-components-schemas-BrainUpdatableProperties-properties-connected_brains_ids
+        integration:
+          $ref: '#/components/schemas/BrainIntegrationUpdateSettingsNullable'
+      required:
+      - brain_id
+      type: object
+      x-do-not-generate: true
+      x-konfig-is-parameter:
+      - brain_id
+    GCHON:
+      example:
+        metadata: "{}"
+        assistant: assistant
+        user_message: user_message
+        message_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        message: message
+        brain_name: brain_name
+        chat_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        prompt_title: prompt_title
+        message_time: message_time
+        datetime: datetime
+        action: action
+        id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        brain_id: brain_id
+        thumbs: true
+        status: null
+      properties:
+        chat_id:
+          format: uuid
+          nullable: true
+          title: Chat Id
+          type: string
+        message_id:
+          format: uuid
+          type: string
+        user_message:
+          title: User Message
+          type: string
+        assistant:
+          title: Assistant
+          type: string
+        message_time:
+          nullable: true
+          title: Message Time
+          type: string
+        prompt_title:
+          nullable: true
+          title: Prompt Title
+          type: string
+        brain_name:
+          nullable: true
+          title: Brain Name
+          type: string
+        brain_id:
+          nullable: true
+          title: Brain Id
+          type: string
+        metadata:
+          nullable: true
+          title: Metadata
+          type: object
+        thumbs:
+          nullable: true
+          title: Thumbs
+          type: boolean
+        id:
+          format: uuid
+          title: Id
+          type: string
+        datetime:
+          title: Datetime
+          type: string
+        message:
+          nullable: true
+          title: Message
+          type: string
+        action:
+          title: Action
+          type: string
+        status:
+          $ref: '#/components/schemas/NotificationsStatusEnum'
+      title: GetChatHistoryOutput
+      type: object
+  securitySchemes:
+    AuthBearer:
+      scheme: bearer
+      type: http
+      x-konfig-globally-required-security: false
+
